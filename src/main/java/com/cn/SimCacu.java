@@ -21,7 +21,7 @@ public class SimCacu {
 		Dandelion(text1, text2);
 	
 	}
-	//this is first push abc
+	//this is first push abcd
 	public static float Dandelion(String text1,String text2) throws IOException{
 		// TODO Auto-generated method stub
 		
