@@ -96,14 +96,14 @@ public class sparqlQuery extends HttpServlet {
 	public ArrayList<ArrayList<String>> getTriples(String entity, ArrayList<ArrayList<String>> triples, String idea_id)
 			throws UnsupportedEncodingException {
 
-		// SPARQL的语法
+		// SPARQL的语法  
 		String queryString = 
-
 				"prefix dbr: <http://dbpedia.org/resource/>\n" +
-				//"select ?y ?z where {dbr:" + entity + " ?y ?z FILTER (langMatches(lang(?z),'en'))}";
+				
 				"select ?y ?z where {dbr:" + entity + " ?y ?z }";
 		
-
+		
+		
 		// 执行SPARQL语句
 		QueryExecution qexec = getResult(queryString);
 
@@ -120,7 +120,7 @@ public class sparqlQuery extends HttpServlet {
 				triple.add(entity);
 				triple.add(getElement(soln.get("?y").toString()));
 				triple.add(getElement(soln.get("?z").toString()));
-				insertMySQl(triple, idea_id);
+				//insertMySQl(triple, idea_id);
 				triples.add(triple);
 				triple = new ArrayList<String>();
 			}
@@ -189,11 +189,9 @@ public class sparqlQuery extends HttpServlet {
 			String sql = String.format(sql_insert, idea_id, '"' + triple.get(0) + '"', '"' + triple.get(1) + '"',
 					'"' + triple.get(2) + '"');
 			
-			System.out.println(sql);
 			// execute
 			ps.executeUpdate(sql);
 
-			System.out.println("Successfully Inserted!");
 
 		} catch (Exception e) {
 			e.printStackTrace();

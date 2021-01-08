@@ -36,7 +36,7 @@ public class similarity {
 		String triples = "Auction has final price,Auction has highest bidder,factory produce product,Customers pay high prices,Investors invest money,Investor support ideas";
 
 		// 先改变形态 动词转原形，名词转单数和小写
-		List<String> triples_reform = getWord(triples);
+		List<String> triples_reform = wordReform(triples);
 
 		//创建数组，为了以后显示每一个idea的相似度
 		List<Float> description_sim = new ArrayList();
@@ -44,7 +44,7 @@ public class similarity {
 		//将描述拆开，一一对比
 		for (String description : descriptions) {
 
-			List<String> description_reform = getWord(description);
+			List<String> description_reform = wordReform(description);
 			
 			//计算单独的描述和三元组的相似度
 			description_sim.add(SimilarityCalculation(triples_reform, description_reform));
@@ -76,7 +76,7 @@ public class similarity {
 		return similarity;
 	}
 
-	public static List getWord(String text) {
+	public static List wordReform(String text) {
 		/**
 		 * 创建一个StanfordCoreNLP object tokenize(分词)、ssplit(断句)、
 		 * pos(词性标注)、lemma(词形还原)、 ner(命名实体识别)、parse(语法解析)、指代消解？同义词分辨？
@@ -100,7 +100,8 @@ public class similarity {
 
 				String word = token.get(TextAnnotation.class); // 获取分词
 				String pos = token.get(PartOfSpeechAnnotation.class); // 获取词性标注
-				// String ne = token.get(NamedEntityTagAnnotation.class); //
+				// String ne = token.get(NamedEntityTagAnnotation.class); 
+				
 				// 获取命名实体识别结果
 				String lemma = token.get(LemmaAnnotation.class); // 获取词形还原结果
 
@@ -112,6 +113,7 @@ public class similarity {
 				}
 
 				else {
+					
 					// n
 					result.add(Inflector.getInstance().singularize(word).toLowerCase());
 				}
