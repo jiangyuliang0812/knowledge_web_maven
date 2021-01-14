@@ -99,8 +99,11 @@ public class sparqlQuery extends HttpServlet {
 		// SPARQLµÄÓï·¨  
 		String queryString = 
 				"prefix dbr: <http://dbpedia.org/resource/>\n" +
-				
-				"select ?y ?z where {dbr:" + entity + " ?y ?z }";
+				"PREFIX dbo: <http://dbpedia.org/ontology/>\n" +
+				"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"+
+				"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"+
+						
+				"select ?z where {dbr:" + entity + " rdf:type ?z }";
 		
 		
 		
@@ -118,9 +121,10 @@ public class sparqlQuery extends HttpServlet {
 				QuerySolution soln = results.nextSolution();
 				System.out.println(entity);
 				triple.add(entity);
-				triple.add(getElement(soln.get("?y").toString()));
+				//triple.add(getElement(soln.get("?y").toString()));
+				triple.add("is");
 				triple.add(getElement(soln.get("?z").toString()));
-				//insertMySQl(triple, idea_id);
+				insertMySQl(triple, idea_id);
 				triples.add(triple);
 				triple = new ArrayList<String>();
 			}
