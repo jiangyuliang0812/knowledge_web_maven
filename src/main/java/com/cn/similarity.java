@@ -24,32 +24,32 @@ import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.util.CoreMap;
 
 public class similarity {
-
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
 		List<String> names = Arrays.asList("Add-on","Affiliation","Aikido","Auction","Barter","Cash Machine","Cross Selling","Crowdfunding","Crowdsourcing","Customer Loyalty");
-
+		
 		List<String> descriptions = Arrays.asList("The core offering is priced competitively, but there are numerous extras that drive the final price up. In the end, the costumer pays more than he or she initially assumed. Customers benefit from a variable offer, which they can adapt to their specific needs.","The focus lies in supporting others to successfully sell products and directly benefit from successful transactions. Affiliates usually profit from some kind of pay-per-sale or pay-per-display compensation. The company, on the other hand, is able to gain access to a more diverse potential customer base without additional active sales or marketing efforts.","Aikido is a Japanese martial art in which the strength of an attacker is used against him or her. As a business model, Aikido allows a company to offer something diametrically opposed to the image and mindset of the competition. This new value proposition attracts customers who prefer ideas or concepts opposed to the mainstream","Auctioning means selling a product or service to the highest bidder. The final price is achieved when a particular end time of the auction is reached or when no higher offers are received. This allows the company to sell at the highest price acceptable to the customer. The customer benefits from the opportunity to influence the price of a product.",
 				"Barter is a method of exchange in which goods are given away to customers without the transaction of actual money. In return, they provide something of value to the sponsoring organisation. The exchange does not have to show any direct connection and is valued differently by each party.","In the Cash Machine concept, the customer pays upfront for the products sold to the customer before the company is able to cover the associated expenses. This results in increased liquidity which can be used to amortise debt or to fund investments in other areas.","In this model, services or products from a formerly excluded industry are added to the offerings, thus leveraging existing key skills and resources. In retail especially, companies can easily provide additional products and offerings that are not linked to the main industry on which they were previously focused. Thus, additional revenue can be generated with relatively few changes to the existing infrastructure and assets, since more potential customer needs are met.","A product, project or entire start-up is financed by a crowd of investors who wish to support the underlying idea, typically via the Internet. If the critical mass is achieved, the idea will be realized and investors receive special benefits, usually proportionate to the amount of money they provided.","The solution of a task or problem is adopted by an anonymous crowd, typically via the Internet. Contributors receive a small reward or have the chance to win a prize if their solution is chosen for production or sale. Customer interaction and inclusion can foster a positive relationship with a company, and subsequently increase sales and revenue.","Customers are retained and loyalty assured by providing value beyond the actual product or service itself, i.e., through incentive-based programs. The goal is to increase loyalty by creating an emotional connection or simply rewarding it with special offers. Customers are voluntarily bound to the company, which protects future revenue.");
 		
 		String triples = "Auction has final price,Auction has highest bidder,factory produce product,Customers pay high prices,Investors invest money,Investor support ideas";
-
+		
 		// 先改变形态 动词转原形，名词转单数和小写
 		List<String> triples_reform = wordReform(triples);
-
+		
 		//创建数组，为了以后显示每一个idea的相似度
 		List<Float> description_sim = new ArrayList();
-
+		
 		//将描述拆开，一一对比
 		for (String description : descriptions) {
-
+			
 			List<String> description_reform = wordReform(description);
 			
 			//计算单独的描述和三元组的相似度
 			description_sim.add(SimilarityCalculation(triples_reform, description_reform));
 		}
-
+		
 		
 		System.out.println(description_sim);
 		float Max = Collections.max(description_sim);
@@ -75,7 +75,7 @@ public class similarity {
 		float similarity = sum_of_description / sum_of_triples;
 		return similarity;
 	}
-
+	
 	public static List wordReform(String text) {
 		/**
 		 * 创建一个StanfordCoreNLP object tokenize(分词)、ssplit(断句)、

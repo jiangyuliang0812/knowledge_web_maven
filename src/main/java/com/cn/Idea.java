@@ -10,11 +10,9 @@ import java.sql.*;
 public class Idea {
 	
 	private int idea_id;
-	private String purpose;
-	private String mechanism;
+	private String idea;
 	private Date createTime;
-	private String keyword_purpose;
-	private String keyword_mechanism;
+	private String keywod_idea;
 	
 	
 	public int getIdea_id() {
@@ -26,20 +24,12 @@ public class Idea {
 	}
 
 
-	public String getPurpose() {
-		return purpose;
+	public String getIdea() {
+		return idea;
 	}
 
-	public void setPurpose(String purpose) {
-		this.purpose = purpose;
-	}
-
-	public String getMechanism() {
-		return mechanism;
-	}
-
-	public void setMechanism(String mechanism) {
-		this.mechanism = mechanism;
+	public void setIdea(String idea) {
+		this.idea = idea;
 	}
 
 	public Date getCreateTime() {
@@ -50,32 +40,21 @@ public class Idea {
 		this.createTime = createTime;
 	}
 	
-	public String getKeyword_purpose() {
-		return keyword_purpose;
+	public String getKeyword_idea() {
+		return keywod_idea;
 	}
 
-	public void setKeyword_purpose(String keyword_purpose) {
-		this.keyword_purpose = keyword_purpose;
-	}
-	
-	public String getKeyword_mechanism() {
-		return keyword_mechanism;
+	public void setKeyword_idea(String keywod_idea) {
+		this.keywod_idea = keywod_idea;
 	}
 
-	public void setKeyword_mechanism(String keyword_mechanism) {
-		this.keyword_mechanism = keyword_mechanism;
-	}
 	
-	
-	
-	public Idea(int idea_id, String purpose, String mechanism, Date createTime, String keyword_purpose, String keyword_mechanism) {
+	public Idea(int idea_id, String idea, Date createTime, String keyword_idea) {
 		super();
 		this.idea_id = idea_id;
-		this.purpose = purpose;
-		this.mechanism = mechanism;
+		this.idea = idea;
 		this.createTime = createTime;
-		this.keyword_purpose = keyword_purpose;
-		this.keyword_mechanism = keyword_mechanism;
+		this.keywod_idea = keyword_idea;
 	}
 
 }

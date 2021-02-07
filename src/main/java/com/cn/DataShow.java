@@ -51,17 +51,11 @@ public class DataShow extends HttpServlet {
 
 			while (rs.next()) {
 				int idea_id = rs.getInt("idea_id");
-				String purpose = rs.getString("purpose");
-				String mechanism = rs.getString("mechanism");
+				String idea = rs.getString("idea");			
 				Date createTime = rs.getDate("createTime");
-				String keyword_purpose = rs.getString("keyword_purpose");
-				String keyword_mechanism = rs.getString("keyword_mechanism");
-				
-				// show data in Console
-				//System.out.printf("%s %s", purpose, mechanism + "\n");
-
-				Idea idea = new Idea(idea_id, purpose, mechanism, createTime, keyword_purpose, keyword_mechanism);
-				list.add(idea);
+				String keyword_idea = rs.getString("keyword_idea");
+				Idea idea_unit = new Idea(idea_id, idea, createTime, keyword_idea);
+				list.add(idea_unit);
 			}
 
 		} catch (Exception e) {

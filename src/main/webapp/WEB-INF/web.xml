@@ -38,15 +38,16 @@
   	<url-pattern>/DataShow</url-pattern>
   </servlet-mapping>
   
-  <servlet>
-	<servlet-name>sparqlQuery</servlet-name>
-	<servlet-class>com.cn.sparqlQuery</servlet-class>
+   <servlet>
+	<servlet-name>TriplesIdea</servlet-name>
+	<servlet-class>com.cn.TriplesIdea</servlet-class>
   </servlet>
   
   <servlet-mapping>
-  	<servlet-name>sparqlQuery</servlet-name>
-  	<url-pattern>/sparqlQuery</url-pattern>
+  	<servlet-name>TriplesIdea</servlet-name>
+  	<url-pattern>/TriplesIdea</url-pattern>
   </servlet-mapping>
+  
   
   
   

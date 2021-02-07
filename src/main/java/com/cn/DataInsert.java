@@ -57,10 +57,9 @@ public class DataInsert extends HttpServlet {
 		resp.setCharacterEncoding("utf-8");
 
 		// get purpose and mechanism from FirstPage
-		String purpose = req.getParameter("purpose");
-		String mechanism = req.getParameter("mechanism");
+		String idea = req.getParameter("idea");
 
-		insertMySQl(purpose, mechanism);
+		insertMySQl(idea);
 
 		// go back to Firstpage
 		resp.sendRedirect("/knowledge_web_maven/FirstPage.jsp");
@@ -73,7 +72,7 @@ public class DataInsert extends HttpServlet {
 		doGet(req, resp);
 	}
 
-	public void insertMySQl(String purpose, String mechanism) {
+	public void insertMySQl(String idea) {
 
 		Connection conn = null;
 		PreparedStatement ps = null;
@@ -82,82 +81,84 @@ public class DataInsert extends HttpServlet {
 
 			// Connect to the database
 			Class.forName("com.mysql.cj.jdbc.Driver");
-
+			
 			String host = util.getValue("host");
 			String user = util.getValue("user");
 			String password = util.getValue("password");
 			String database = util.getValue("database");
 			String url = String.format("jdbc:mysql://%s:3306/%s?connectTimeout=3000", host, database);
-
+			
 			conn = DriverManager.getConnection(url, user, password);
 			
 			// Use Monkey Learn to get keywords from purpose 
-			ArrayList<ArrayList<Map<String,String>>> res_purpose = getKeyWord(purpose);
+			ArrayList<ArrayList<Map<String,String>>> res_idea = getKeyWord(idea);
 			
 			// keyWordsList_purpose(List) will be put in keyWords_purpose(String)
-			List<String> keyWordsList_purpose = new ArrayList<String>();
+			List<String> keyWordsList_idea = new ArrayList<String>();
 			
 			// Monkey will separate phrase, so we use regular expressions to get phrases
-			Pattern p_purpose = Pattern.compile("\\S+"); 
-			Matcher m_purpose = p_purpose.matcher(purpose.replace(",", " ").replace(".", " "));
+			Pattern p_idea = Pattern.compile("\\S+"); 
+			Matcher m_idea = p_idea.matcher(idea.replace(",", " ").replace(".", " "));
 
 			// Now we have all the words in the purpose, including phrases
 	
-			List<String> all_words_phrases_purpose = new ArrayList<String>();
+			List<String> all_words_phrases_idea = new ArrayList<String>();
 			
 			// Words and phrases in purpose will be added one by one, One word is one group
-			while(m_purpose.find()) { 
-				all_words_phrases_purpose.add(m_purpose.group());
+			while(m_idea.find()) { 
+				all_words_phrases_idea.add(m_idea.group());
 			}
 			
-			for (Map i : res_purpose.get(0)){
+			for (Map i : res_idea.get(0)){
 				
-				String key_word_purpose = (String) i.get("keyword");
+				String key_word_idea = (String) i.get("keyword");
 				// If there are keywords in the phrase, just use the phrase, not the keyword
-				for (String j : all_words_phrases_purpose){ 
+				for (String j : all_words_phrases_idea){ 
 					
 					//如果被正则匹配分开的词组包含关键字，那我们就储存这个分开的词组，如果不包含就存原来的
-					key_word_purpose = (j.indexOf(key_word_purpose) >= 0)?j:key_word_purpose;
+					key_word_idea = (j.indexOf(key_word_idea) >= 0)?j:key_word_idea;
 					//名词转单数
-					key_word_purpose = Inflector.getInstance().singularize(key_word_purpose);
+					key_word_idea = Inflector.getInstance().singularize(key_word_idea);
 					
 				}
 				
 				
 				// Avoid adding the same words 
-				if (!keyWordsList_purpose.contains(key_word_purpose))
+				if (!keyWordsList_idea.contains(key_word_idea))
 					
-					keyWordsList_purpose.add(key_word_purpose);
+					keyWordsList_idea.add(key_word_idea);
 			}
 			
+			/*
 			// Add verb 
-			for (String i : (List<String>) getVerbKeyWord(purpose)){
-				keyWordsList_purpose.add(i);
+			for (String i : (List<String>) getVerbKeyWord(idea)){
+				keyWordsList_idea.add(i);
 			}
+			*/
 			
-			//remove same waords
-			keyWordsList_purpose = removeDuplicate(keyWordsList_purpose);
+			//remove same words
+			keyWordsList_idea = removeDuplicate(keyWordsList_idea);
 			
 			// All keywords are extracted, we will sort them by index
 			
 			// Convert to lowercase letters, Easy to compare
-			String purpose_lower = purpose.toLowerCase();
+			String idea_lower = idea.toLowerCase();
 			
 			//Overwrite Interface Comparator
-			Collections.sort(keyWordsList_purpose, new Comparator<String>()
+			Collections.sort(keyWordsList_idea, new Comparator<String>()
 		    {
 		        public int compare(String a1, String a2)
 		        {	
 		        	// Compare the index of word1 and word2
-		        	int word1 = purpose_lower.indexOf(a1.toLowerCase());
+		        	int word1 = idea_lower.indexOf(a1.toLowerCase());
 		        	
 		        	//Because Monkey Learn will turn the singular into plural, or some capitalization issues, so I need to convert singular, plural and capitalization
-		        	word1 = (word1 >= 0)?word1:purpose_lower.indexOf(a1.split("#")[0].toLowerCase());
-		        	word1 = (word1 >= 0)?word1:purpose_lower.indexOf(Inflector.getInstance().pluralize(a1.split("#")[0].toLowerCase()));
+		        	word1 = (word1 >= 0)?word1:idea_lower.indexOf(a1.split("#")[0].toLowerCase());
+		        	word1 = (word1 >= 0)?word1:idea_lower.indexOf(Inflector.getInstance().pluralize(a1.split("#")[0].toLowerCase()));
 		           	
-		        	int word2 = purpose_lower.indexOf(a2.toLowerCase());
-		        	word2 = (word2 >= 0)?word2:purpose_lower.indexOf(a2.split("#")[0].toLowerCase());
-		        	word2 = (word2 >= 0)?word2:purpose_lower.indexOf(Inflector.getInstance().pluralize(a2.split("#")[0].toLowerCase()));
+		        	int word2 = idea_lower.indexOf(a2.toLowerCase());
+		        	word2 = (word2 >= 0)?word2:idea_lower.indexOf(a2.split("#")[0].toLowerCase());
+		        	word2 = (word2 >= 0)?word2:idea_lower.indexOf(Inflector.getInstance().pluralize(a2.split("#")[0].toLowerCase()));
 		        	
 		        	// Ascending
 		        	return word1 - word2;
@@ -165,29 +166,18 @@ public class DataInsert extends HttpServlet {
 		    });
 			
 			// Put Keywords into String format for easy to put them into database
-			String keyWords_purpose = String.join(",", keyWordsList_purpose);
+			String keyWords_idea = String.join(",", keyWordsList_idea);
 			
 			
-			
-			//Use Monkey Learn to get keywords from mechanism
-			ArrayList<ArrayList<Map<String,String>>> res_mechanism = getKeyWord(mechanism);
-			
-			List keyWordsList_mechanism = new ArrayList<String>();
-			for (Map i : res_mechanism.get(0)){
-			
-				keyWordsList_mechanism.add(i.get("keyword"));
-			}
-	
-			String keyWords_mechanism = String.join(",", keyWordsList_mechanism);
 
 			// Write a SQL statement,store it in String, then pre-compile, and then execute
-			String sql_insert = "insert into ideas(purpose,mechanism,createTime,keyword_purpose,keyword_mechanism) values (%s,%s,now(),%s,%s)";
+			String sql_insert = "insert into ideas(idea,createTime,keyword_idea) values (%s,now(),%s)";
 
 			// Pre compilation
 			ps = conn.prepareStatement(sql_insert);
 
 			// Fill placeholder
-			String sql = String.format(sql_insert, '"' + purpose + '"', '"' + mechanism + '"','"'+keyWords_purpose+'"','"'+keyWords_mechanism+'"');
+			String sql = String.format(sql_insert, '"' + idea + '"','"'+ keyWords_idea+ '"');
 			
 			//execute
 			ps.executeUpdate(sql);
@@ -231,8 +221,7 @@ public class DataInsert extends HttpServlet {
         Header[][] headers = res.headers;
         for (Header[] header : headers) {
          for (Header h : header){
-          System.out.println("Key : " + h.getName() 
-          + " ,Value : " + h.getValue());
+          System.out.println("Key : " + h.getName()  + " ,Value : " + h.getValue());
          }
       
      }

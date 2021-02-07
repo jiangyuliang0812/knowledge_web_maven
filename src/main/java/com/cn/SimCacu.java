@@ -62,7 +62,7 @@ public class SimCacu {
 		String result = null;
 		float similarity = 0;
 		while ((l = buffer.readLine()) != null) {
-			System.out.println(l);
+//			System.out.println(l);
 
 			// 处理String l 得到similarity
 			l = l.replace("{", "").replace("}", "").replace(":", ",");
@@ -74,7 +74,7 @@ public class SimCacu {
 			similarity = Float.parseFloat(result);
 		}
 
-		System.out.println(similarity);
+//		System.out.println(similarity);
 		return similarity;
 	}
 
