@@ -1,54 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
-  <display-name>knowledge_web_maven</display-name>
-  <welcome-file-list>
-  
-    <welcome-file>FirstPage.jsp</welcome-file>
-    
-  </welcome-file-list>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0">
+	
+	<display-name>knowledge_web_maven</display-name>
+	<welcome-file-list>
 
-  
-  <servlet>
-	<servlet-name>DataInsert</servlet-name>
-	<servlet-class>com.cn.DataInsert</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-  	<servlet-name>DataInsert</servlet-name>
-  	<url-pattern>/DataInsert</url-pattern>
-  </servlet-mapping>
-  
-    <servlet>
-	<servlet-name>DataReset</servlet-name>
-	<servlet-class>com.cn.DataReset</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-  	<servlet-name>DataReset</servlet-name>
-  	<url-pattern>/DataReset</url-pattern>
-  </servlet-mapping>
-  
-   <servlet>
-	<servlet-name>DataShow</servlet-name>
-	<servlet-class>com.cn.DataShow</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-  	<servlet-name>DataShow</servlet-name>
-  	<url-pattern>/DataShow</url-pattern>
-  </servlet-mapping>
-  
-   <servlet>
-	<servlet-name>TriplesIdea</servlet-name>
-	<servlet-class>com.cn.TriplesIdea</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-  	<servlet-name>TriplesIdea</servlet-name>
-  	<url-pattern>/TriplesIdea</url-pattern>
-  </servlet-mapping>
-  
-  
-  
-  
+		<welcome-file>FirstPage.jsp</welcome-file>
+
+	</welcome-file-list>
+
+	<servlet>
+		<servlet-name>Main</servlet-name>
+		<servlet-class>com.cn.Main</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Main</servlet-name>
+		<url-pattern>/Main</url-pattern>
+	</servlet-mapping>
+	
+	
+	<servlet>
+		<servlet-name>Evaluation</servlet-name>
+		<servlet-class>com.cn.Evaluation</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Evaluation</servlet-name>
+		<url-pattern>/Evaluation</url-pattern>
+	</servlet-mapping>
+	
+
+
+	<servlet>
+		<servlet-name>DataInsert</servlet-name>
+		<servlet-class>com.cn.DataInsert</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>DataInsert</servlet-name>
+		<url-pattern>/DataInsert</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>DataReset</servlet-name>
+		<servlet-class>com.cn.DataReset</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>DataReset</servlet-name>
+		<url-pattern>/DataReset</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>DataShow</servlet-name>
+		<servlet-class>com.cn.DataShow</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>DataShow</servlet-name>
+		<url-pattern>/DataShow</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>TriplesIdea</servlet-name>
+		<servlet-class>com.cn.TriplesIdea</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>TriplesIdea</servlet-name>
+		<url-pattern>/TriplesIdea</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>ResultShow</servlet-name>
+		<servlet-class>com.cn.ResultShow</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ResultShow</servlet-name>
+		<url-pattern>/ResultShow</url-pattern>
+	</servlet-mapping>
+
+
+
+
 </web-app>

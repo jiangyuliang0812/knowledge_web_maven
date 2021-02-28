@@ -1,87 +1,99 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" import="java.util.*"
+	import="com.cn.DataShow,com.cn.Idea,com.cn.Evaluation"
+	contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
 <html>
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>ThirdPage</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <title>ThirdPage</title>
 
+    <style>
+        body {
+            background-color: #F1FAFA;
+            font-size: 16;
+            width: 90%;
+            margin: auto;
+            border: 10px;
+            padding: 12px;
+        }
 
-<style>
+        p {
+            font-size: 25px;
+        }
 
-body {
-    background-color: #F1FAFA;
-	font-size: 16;
-	width: 85%;
-	margin: auto;
-}
+        h1 {
+            color: black;
+            font-size: 40px;
+        }
 
-div {
-	background-color: lightgrey;
-	width: 400px;
-	border: 5px solid rgb(161, 117, 99);
-	padding: 10px;
-	margin: 10px;
-}
-</style>
+        input{
+        width: 100px; height: 30px; font-weight:bold;
+        }
+
+    </style>
 
 </head>
-</head>
-<h1  style="color: black ; font-size:45px"> Business models </h1>
-    
-	<p style="font-size:30px">
-		We have found the following business models that suit your idea!
-	</p>
 
-	
-	<br>
-	<br>
-	<br>
-	<br>
-	<hr>
+<body>
 
-	
-	
-    <p style="font-size:25px">
-    	1 : The business model (Name of BM) is (percent)% similar to your idea
-	</p>
-	
-	<p style="font-size:25px">
-    	Introduction or  Details of the business model
+    <h1> Evaluation </h1>
+
+    <p>
+        Dear user! 
+        <br>
+        Please evaluate the recommended business model.
     </p>
 
-	<br>
-	<hr>
-	<br>
-	
-	<p style="font-size:25px">
-    	2 : The business model (Name of BM) is (percent)% similar to your idea
-	</p>
-	
-	<p style="font-size:25px">
-    	Introduction or  Details of the business model
-	</p>
-	
-	<br>
-	<hr>
-	<br>
-	
-	<p style="font-size:25px">
-    	3 : The business model (Name of BM) is (percent)% similar to your idea
-	</p>
-	
-	<p style="font-size:25px">
-    	Introduction or  Details of the business model
+    <br>
+    <hr>
+    <br>
+
+    <form name=form1 action="/knowledge_web_maven/Evaluation" method="post">
+        <p>
+            
+            Question 1:
+            <br>
+            Is the business model suitable for the idea?
+            <label><input type="radio" name="evaluation" value="Yes">Yes</label>
+            <label><input type="radio" name="evaluation" value="No">No</label>
+
+        </p>
+    </form>
+    <form name=form2 action="/knowledge_web_maven/Evaluation" method="post">
+        <p>
+            <label> 
+                Question 2:
+                <br>
+                Is the business model suitable for the idea?
+            </label>
+            <label><input type="radio" name="evaluation" value="Yes">Yes</label>
+            <label><input type="radio" name="evaluation" value="No">No</label>
+        </p>
+    </form>
+    <form name=form3 action="/knowledge_web_maven/Evaluation" method="post">
+        <p>
+            <label> 
+                Question 3:
+                <br>
+                Is the business model suitable for the idea?
+            </label>
+            <label><input type="radio" name="evaluation" value="Yes">Yes</label>
+            <label><input type="radio" name="evaluation" value="No">No</label>
+        </p>
+    </form>
+
+    <p>
+        <input type="button" value="Submit" onclick="javascript:form1.submit();form2.submit();form3.submit();" id=button name=button/>
     </p>
+   
 
-
-
-
-	<br>
-	<br>
-	<hr>
-	<br>
-	
+    <br>
+    <hr>
+    <br>
 
 </body>
+
 </html>
