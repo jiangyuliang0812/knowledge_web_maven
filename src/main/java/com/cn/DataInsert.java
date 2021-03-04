@@ -47,6 +47,13 @@ import edu.stanford.nlp.util.CoreMap;
 import org.apache.http.Header;
 
 public class DataInsert {
+	
+	public static void main(String[] args) {
+		
+		String text = "Many burglars break into retail stores, offices, or houses by crashing a window. TCO could be prevented by putting electricity on the glass wall, as soon as the owner is no longer at home, or the shop is closed, or best when the alarm is set up. This way, if a burgler tries to break the glass-window, he/she gets shocked by electricity.";
+		insertMySQl(text);
+		
+	}
 
 	public static void insertMySQl(String idea) {
 		// Use class Utils to get user, password ... from database

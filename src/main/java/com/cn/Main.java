@@ -2,6 +2,7 @@ package com.cn;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -26,7 +27,7 @@ public class Main extends HttpServlet {
 		TriplesIdea.getAndSetTriplesIdea();
 		
 		// compare one idea with all the business models and get similarity
-		List<Float> similarity = Compare.getSimilarity();
+		Map<String, Float> similarity = Compare.getSimilarity();
 		
 		// get suitable business models according to similarity and index
 		List<BusinessModel> list_bm = ResultShow.showBusinessModel(similarity);

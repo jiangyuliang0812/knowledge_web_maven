@@ -45,54 +45,54 @@ public class TriplesBusiness {
 		// System.out.println(data_description);
 		
 		// 用sparql来得到三元组 并存入
-
+		
 		// Description
 		if (data_description != null) {
 			ArrayList<String> triples = new ArrayList<String>();
-			List predicate = Arrays.asList("label");
+			List predicatesList = Arrays.asList("type","subject");
 			String database_name = "triplesbedes";
 			String column_name = "triples_description";
-			triples = Utils.saveTriples(data_description,predicate,database_name,column_name);
+			triples = Utils.saveTriples(data_description,predicatesList,database_name,column_name);
 			System.out.println(triples);
 		}
 		
 		// Company
 		if (data_description != null) {
 			ArrayList<String> triples = new ArrayList<String>();
-			List predicate = Arrays.asList("product","industry","service","brands","manufacturer");
+			List predicatesList = Arrays.asList("type","subject");
 			String database_name = "triplesbecom";
 			String column_name = "triples_company";
-			triples = Utils.saveTriples(data_company,predicate,database_name,column_name);
+			triples = Utils.saveTriples(data_company,predicatesList,database_name,column_name);
 			System.out.println(triples);
 		}
 		
 		// Selling
 		if (data_selling != null) {
 			ArrayList<String> triples = new ArrayList<String>();
-			List predicate = Arrays.asList("subject","label");
+			List predicatesList = Arrays.asList("type","subject");
 			String database_name = "triplesbesell";
 			String column_name = "triples_sell";
-			triples = Utils.saveTriples(data_selling,predicate,database_name,column_name);
+			triples = Utils.saveTriples(data_selling,predicatesList,database_name,column_name);
 			System.out.println(triples);
 		}
 
 		// Advantage
 		if (data_advantage != null) {
 			ArrayList<String> triples = new ArrayList<String>();
-			List predicate = Arrays.asList("subject","label");
+			List predicatesList = Arrays.asList("type","subject");
 			String database_name = "triplesbeadvan";
 			String column_name = "triples_advantage";
-			triples = Utils.saveTriples(data_advantage,predicate,database_name,column_name);
+			triples = Utils.saveTriples(data_advantage,predicatesList,database_name,column_name);
 			System.out.println(triples);
 		}
 
 		// Money
 		if (data_money != null) {
 			ArrayList<String> triples = new ArrayList<String>();
-			List predicate = Arrays.asList("subject","label");
+			List predicatesList = Arrays.asList("type","subject");
 			String database_name = "triplesbemoney";
 			String column_name = "triples_money";
-			triples = Utils.saveTriples(data_money,predicate,database_name,column_name);
+			triples = Utils.saveTriples(data_money,predicatesList,database_name,column_name);
 			System.out.println(triples);
 		}
 		

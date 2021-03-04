@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -168,6 +169,15 @@ public class TriplesIdea extends HttpServlet {
 		try {
 			// 新建一个结果集 储存查询返回的结果
 			ResultSet results = qexec.execSelect();
+			
+			Map<String, Integer> counter = new HashMap<>();
+	        counter.put("type", 0);
+	        counter.put("subject", 0);
+	        List predicatesList = Arrays.asList("type","subject");
+	        
+	        // 变成arrayList才能做删除操作
+	        List predicates = new ArrayList(predicatesList);
+	        
 			// hasNext是判断是否还有下个元素 。
 			for (; results.hasNext();) {
 				QuerySolution soln = results.nextSolution();
@@ -177,24 +187,39 @@ public class TriplesIdea extends HttpServlet {
 				String p = Utils.getElement(soln.get("?y").toString());
 				String o = Utils.getElement(soln.get("?z").toString());
 				
-				List predicates = Arrays.asList("label","product","industry","service","brands","manufacturer","subject");
-
+				// List predicates = Arrays.asList("label","product","industry","service","brands","manufacturer","subject","comment","abstract");
+				
 				if (predicates.contains(p) && (o != null && o.length() != 0)) {
+					
+					int i = counter.get(p);
+					i = i + 1;
+					counter.put(p, i);
+					// System.out.println(counter.get(p));
+					if(counter.get(p) == 3){
+					    for (Object item : predicates) {
+					        if (item.equals(p)) {	      
+					        	predicates.remove(item);
+					            break;
+					        }
+					    }			   
+					}
+					
 					triple.add(s);
 					triple.add(p);
 					triple.add(o);
 
-					// 因为要将三元组整体存到表中，所以从arrayList变成Stringz
+					// 因为要将三元组整体存到表中，所以从arrayList变成String
 					String string_triple = String.valueOf(triple);
+					string_triple = string_triple.replace(",", " ");
 
 					// 检查是否是英文
-					boolean b = Utils.isEnglish(string_triple);
+					boolean b = Utils.tripleFilter(string_triple);
 					if (b == true) {
 						// 去重处理，如果不包含再添加
 						if (!triples.contains(string_triple)) {
 							triples.add(string_triple);
 							insert_idea(string_triple, p, id_idea);
-							//System.out.println(string_triple);
+							System.out.println(string_triple);
 						}
 					}
 					triple = new ArrayList<String>();
@@ -216,7 +241,7 @@ public class TriplesIdea extends HttpServlet {
 		PreparedStatement ps = null;
 
 		// 去掉大括号
-		triple = triple.replace(",", "").replace("[", "").replace("]", ",").replace("_", " ");
+		triple = triple.replace("[", "").replace("]", ",").replace("_", " ");
 
 		try {
 

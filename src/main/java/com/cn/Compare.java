@@ -17,15 +17,13 @@ public class Compare {
 	public static void main(String[] args) throws IOException {
 		
 		getSimilarity();
-
+		
 	}
 
-	public static List<Float> getSimilarity() throws IOException {
+	public static Map<String, Float> getSimilarity() throws IOException {
 		
 		// 得到所有BusinessModel
 		Map<String, Map<String, List>> result_bm = getBusinessModel();
-		
-		System.out.println(result_bm);
 		
 		
 		// 得到最新一条Idea
@@ -41,7 +39,7 @@ public class Compare {
 		    String predicate_idea = idea.getKey();
 		    List Triples_idea = idea.getValue();
 		    
-		    String text_idea = String.join(" ",Triples_idea).replace(",", "");
+		    String text_idea = String.join(" ",Triples_idea);
 		    
 		 	// 这个for循环得到了所有商业模式的结果集
 		    for (Map.Entry<String, Map<String, List>> bm : result_bm.entrySet()){
@@ -52,9 +50,10 @@ public class Compare {
 		    	for(Map.Entry<String, List> bm_unit : bm.getValue().entrySet()){
 		    		String predicate_bm = bm_unit.getKey();
 				    List Triples_bm = bm_unit.getValue();
+				    
 				    if (predicate_idea.equals(predicate_bm)){
 				    	
-				    	String text_bm = String.join(" ",Triples_bm).replace(",,", ",").replace(",", "");
+				    	String text_bm = String.join(" ",Triples_bm).replace(",,", ",");
 				    	System.out.println(text_idea);
 				    	System.out.println(text_bm);
 				    	float sim = SimCacu.Dandelion(text_idea,text_bm);
@@ -89,27 +88,37 @@ public class Compare {
 		
 		// 处理相似度结果
 		System.out.println(result_sim);
-		float sum = 0;
-
-		List<Float> sim_final = new ArrayList();
+		
+		// 这个for循环为了找到result里最长的list 先遍历map 然后得到最长的list
+		int size = 0;
 		for(Map.Entry<String, List> result_similarity : result_sim.entrySet()){
-			 String business_id = result_similarity.getKey();
-			 List similarity = result_similarity.getValue();
-			 
-			 for(int i = 0; i < similarity.size(); i++){
-				sum += (float)similarity.get(i); 
-			 }
-			 
-			 //最好写一个谓词计数器，目前测试两个谓词
-			 sum = sum/1;
-			 sim_final.add(sum);
-			 sum = 0;
-			 
-			 
+			List simList = result_similarity.getValue();
+			
+			if(size <= simList.size()){
+				size = simList.size();
+			}		
 		}
+		
+		float sum = 0;
+		
+		Map<String, Float> sim_final = new HashMap<>();
+		for(Map.Entry<String, List> result_similarity : result_sim.entrySet()){
+			
+			String business_id = result_similarity.getKey();
+			List similarity = result_similarity.getValue();
+			
+			for(int i = 0; i < similarity.size(); i++){
+				sum += (float)similarity.get(i); 
+			}
+			
+			sum = sum/size;
+			sim_final.put(business_id, sum);
+			sum = 0;	 
+
+		}
+		
 		System.out.println(sim_final);
 		return sim_final;
-		
 		
 	}
 	
@@ -173,11 +182,14 @@ public class Compare {
 					if (tem_map.containsKey(predicate)) {
 						List tem_list = tem_map.get(predicate);
 						// System.out.println(tem_list);
+						// Map数据类型就能直接添加到找到的list里，不需要再put
 						tem_list.add(triples_company);
+						
 					} else {
 						List tem_list = new ArrayList();
 						tem_list.add(triples_company);
 						tem_map.put(predicate, tem_list);
+						
 					}
 				} else {
 					Map<String, List> tem_map = new HashMap<>();
@@ -203,10 +215,12 @@ public class Compare {
 						List tem_list = tem_map.get(predicate);
 						// System.out.println(tem_list);
 						tem_list.add(triples_description);
+						
 					} else {
 						List tem_list = new ArrayList();
 						tem_list.add(triples_description);
 						tem_map.put(predicate, tem_list);
+					
 					}
 				} else {
 					Map<String, List> tem_map = new HashMap<>();
@@ -232,10 +246,12 @@ public class Compare {
 						List tem_list = tem_map.get(predicate);
 						// System.out.println(tem_list);
 						tem_list.add(triples_sell);
+						
 					} else {
 						List tem_list = new ArrayList();
 						tem_list.add(triples_sell);
 						tem_map.put(predicate, tem_list);
+						
 					}
 				} else {
 					Map<String, List> tem_map = new HashMap<>();
@@ -261,6 +277,8 @@ public class Compare {
 						List tem_list = tem_map.get(predicate);
 						// System.out.println(tem_list);
 						tem_list.add(triples_advantage);
+						
+						
 					} else {
 						List tem_list = new ArrayList();
 						tem_list.add(triples_advantage);
@@ -290,10 +308,12 @@ public class Compare {
 						List tem_list = tem_map.get(predicate);
 						// System.out.println(tem_list);
 						tem_list.add(triples_money);
+						
 					} else {
 						List tem_list = new ArrayList();
 						tem_list.add(triples_money);
 						tem_map.put(predicate, tem_list);
+						
 					}
 				} else {
 					Map<String, List> tem_map = new HashMap<>();
@@ -323,6 +343,15 @@ public class Compare {
 				}
 				if (ps2 != null) {
 					ps2.close();
+				}
+				if (ps3 != null) {
+					ps3.close();
+				}
+				if (ps4 != null) {
+					ps4.close();
+				}
+				if (ps5 != null) {
+					ps5.close();
 				}
 				if (conn != null) {
 					conn.close();
@@ -379,6 +408,7 @@ public class Compare {
 					List tem_list = result.get(predicate);
 					// System.out.println(tem_list);
 					tem_list.add(triples_idea);
+					
 				} else {
 					List tem_list = new ArrayList();
 					tem_list.add(triples_idea);
@@ -386,10 +416,8 @@ public class Compare {
 				}
 			}
 
-			
 			rs.close();
 			
-		
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

@@ -29,9 +29,9 @@ import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.util.CoreMap;
 
 public class KeyWords {
-
+	
 	public static void main(String[] args) throws MonkeyLearnException {
-		String text = "Elon Musk has shared a photo of the spacesuit designed by SpaceX. This is the second image shared of the new design and the first to feature the spacesuit’s full-body look.";
+		String text = "Many burglars break into retail stores, offices, or houses by crashing a window. TCO could be prevented by putting electricity on the glass wall, as soon as the owner is no longer at home, or the shop is closed, or best when the alarm is set up. This way, if a burgler tries to break the glass-window, he/she gets shocked by electricity.";
 		String result = getKeywords(text);
 		System.out.print(result);
 	}
@@ -46,54 +46,40 @@ public class KeyWords {
 		
 		// keyWordsList_text(List) will be put in keyWords_text(String)
 		List<String> keyWordsList_text = new ArrayList<String>();
-		
-		// Monkey will separate phrase, so we use regular expressions to get phrases
-		Pattern p_text = Pattern.compile("\\S+"); 
-		Matcher m_text = p_text.matcher(text.replace(",", " ").replace(".", " "));
-
-		// Now we have all the words in the text
-		List<String> all_words_phrases_text = new ArrayList<String>();
-		
-		// Words and phrases in purpose will be added one by one, One word is one group
-		while(m_text.find()) { 
-			all_words_phrases_text.add(m_text.group());
-		}
-		
+				
 		for (Map i : res_monkey.get(0)){
 			
 			String key_word_text = (String) i.get("keyword");
 			
-			// If there are keywords in the phrase, just use the phrase, not the keyword
-			for (String j : all_words_phrases_text){ 
-				
-				//如果被正则匹配分开的词组包含关键字，那我们就储存这个分开的词组，如果不包含就存原来的
-				key_word_text = (j.indexOf(key_word_text) >= 0)?j:key_word_text;
-				//名词转单数
-				key_word_text = Inflector.getInstance().singularize(key_word_text);
-				
-			}
-			
-			// Avoid adding the same words 
-			if (!keyWordsList_text.contains(key_word_text))
-				
-				keyWordsList_text.add(key_word_text);
+			 // 为了得到更多的信息 拆分词组
+			 for (String word : key_word_text.split(" ")){
+				    
+		            // System.out.println(word);
+		        	key_word_text = Inflector.getInstance().singularize(word);
+		        	
+		        	// Avoid adding the same words 
+					if (!keyWordsList_text.contains(key_word_text)){
+						keyWordsList_text.add(key_word_text);
+					}
+		        }
 		}
 		
-		
+		/*
 		// Add verb 
 		for (String i : (List<String>) getVerbKeyWord(text)){
 			keyWordsList_text.add(i);
 		}
+		*/
 
-		//remove same words
+		// remove same words
 		keyWordsList_text = KeyWords.removeDuplicate(keyWordsList_text);
 		
 		// All keywords are extracted, we will sort them by index
 		
-		// Convert to lowercase letters, Easy to compare
+		// Convert to lowercase letters, Easy to compare index
 		String text_lower = text.toLowerCase();
 		
-		//Overwrite Interface Comparator
+		// Overwrite Interface Comparator
 		Collections.sort(keyWordsList_text, new Comparator<String>()
 	    {
 	        public int compare(String a1, String a2)
@@ -101,7 +87,7 @@ public class KeyWords {
 	        	// Compare the index of word1 and word2
 	        	int word1 = text_lower.indexOf(a1.toLowerCase());
 	        	
-	        	//Because Monkey Learn will turn the singular into plural, or some capitalization issues, so I need to convert singular, plural and capitalization
+	        	// Because Monkey Learn will turn the singular into plural, or some capitalization issues, so I need to convert singular, plural and capitalization
 	        	word1 = (word1 >= 0)?word1:text_lower.indexOf(a1.split("#")[0].toLowerCase());
 	        	word1 = (word1 >= 0)?word1:text_lower.indexOf(Inflector.getInstance().pluralize(a1.split("#")[0].toLowerCase()));
 	           	
@@ -117,10 +103,6 @@ public class KeyWords {
 		// Put Keywords into String format for easy to put them into database
 		String keyWords_text = String.join(",", keyWordsList_text);
 		
-		// 处理一下结果
-		keyWords_text = keyWords_text.replace(".", "").replace("’", "");
-		
-		
 		return keyWords_text;
 	}
 	
@@ -131,18 +113,19 @@ public class KeyWords {
         String[] textList = {text};
         MonkeyLearnResponse res = ml.extractors.extract(MODEL_ID, textList);
         ArrayList result = res.arrayResult;
-        
+        // System.out.println(result);
+       
+        /*
         // Query remaining times
         Header[][] headers = res.headers;
         for (Header[] header : headers) {
-         for (Header h : header){
-          System.out.println("Key : " + h.getName()  + " ,Value : " + h.getValue());
-         }
-      
-     }
-
+        	for (Header h : header){
+        		System.out.println("Key : " + h.getName()  + " ,Value : " + h.getValue());
+        	}
+        }
         System.out.println(headers.toString());
-      
+      	*/
+        
         // X-Query-Limit-Limit  您当前的查询限制。
         // X-Query-Limit-Remaining 您的帐户可以使用的查询数量。
         // X-Query-Limit-Request-Queries 此请求消耗的查询数。

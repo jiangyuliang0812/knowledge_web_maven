@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import com.hp.hpl.jena.query.Query;
@@ -40,7 +43,7 @@ public class Utils {
 	}
 
 	// 查看每一个entity是否有三元组
-	public static ArrayList<String> saveTriples(ArrayList<ArrayList<String>> data, List predicate, String database_name, String column_name) throws UnsupportedEncodingException {
+	public static ArrayList<String> saveTriples(ArrayList<ArrayList<String>> data, List predicatesList, String database_name, String column_name) throws UnsupportedEncodingException {
 		
 		ArrayList<String> triples = new ArrayList<String>();
 		String entity = "";
@@ -61,10 +64,10 @@ public class Utils {
 					entity_all_capital = allCapital(entity);
 					
 					// 不断地往triples里添加找到三元组
-					triples = getTriples(entity_first_capital, triples, id, database_name, column_name, predicate);
+					triples = getTriples(entity_first_capital, triples, id, database_name, column_name, predicatesList);
 					// 如果找到不到首字母大写的，再尝试全部大写
 					if(triples.size() == 0){
-						triples = getTriples(entity_all_capital, triples, id, database_name, column_name, predicate);
+						triples = getTriples(entity_all_capital, triples, id, database_name, column_name, predicatesList);
 					}
 					
 					// System.out.println(triples);
@@ -75,7 +78,7 @@ public class Utils {
 	}
 	
 	// 通过sparql语句来查找三元组，检查是否是英文，然后存入数据库
-    public static ArrayList<String> getTriples(String entity, ArrayList<String> triples, String id_business, String database_name, String column_name, List predicate)
+    public static ArrayList<String> getTriples(String entity, ArrayList<String> triples, String id_business, String database_name, String column_name, List predicatesList)
             throws UnsupportedEncodingException {
     	// SPARQL的语法
         String queryString = "prefix dbr: <http://dbpedia.org/resource/>\n"
@@ -93,6 +96,14 @@ public class Utils {
         try {
         	// 新建一个结果集 储存查询返回的结果
             ResultSet results = qexec.execSelect();
+            
+            Map<String, Integer> counter = new HashMap<>();
+            List predicates = new ArrayList(predicatesList);
+            for(int i = 0; i < predicates.size(); i ++){
+                String predicate = (String) predicates.get(i);
+                counter.put(predicate, 0);             
+            }
+	        
             // hasNext是判断是否还有下个元素 。
             for (; results.hasNext();) {
             	
@@ -103,16 +114,31 @@ public class Utils {
                 String p = getElement(soln.get("?y").toString());
                 String o = getElement(soln.get("?z").toString());
                 
-                if (predicate.contains(p) && (o != null && o.length() != 0)) {
+                if (predicates.contains(p) && (o != null && o.length() != 0)) {
+                	
+					int i = counter.get(p);
+					i = i + 1;
+					counter.put(p, i);
+					// System.out.println(counter.get(p));
+					if(counter.get(p) == 3){
+					    for (Object item : predicates) {
+					        if (item.equals(p)) {	      
+					        	predicates.remove(item);
+					            break;
+					        }
+					    }			   
+					}
+                	
                     triple.add(s);
                     triple.add(p);
                     triple.add(o);
                     
                     // 因为要将三元组整体存到表中，所以从arrayList变成String
-                    String string_triple = String.valueOf(triple);
+					String string_triple = String.valueOf(triple);
+					string_triple = string_triple.replace(",", " ");
                     
-                    // 检查是否是英文
-                    boolean b = isEnglish(string_triple);
+                    // 筛选一下，是否是英文
+                    boolean b = tripleFilter(string_triple);
                     if (b == true) {
                     	// 去重处理，如果不包含再添加
                         if (!triples.contains(string_triple)) {
@@ -140,7 +166,7 @@ public class Utils {
 		PreparedStatement ps = null;
 
 		// 去掉大括号
-		triple = triple.replace(",", "").replace("[", "").replace("]", ",").replace("_", " ");
+		triple = triple.replace("[", "").replace("]", ",").replace("_", " ");
 
 		try {
 
@@ -227,14 +253,17 @@ public class Utils {
 		// 以#为分割，取最后一个字符串
 		String[] tem2 = res1.split("#");
 		String res2 = tem2[tem2.length - 1];
-
-		return res2;
+		// 以:为分割，取最后一个字符串
+		String[] tem3 = res2.split(":");
+		String res3 = tem3[tem3.length - 1];
+		
+		return res3;
 	}
 	
 	// 英文过滤函数 只是判断
-	public static boolean isEnglish(String string_triple) {
+	public static boolean tripleFilter(String string_triple) {
 
-		// 判断只能是@en
+		// 判断如果有@,那么只能@en
 		if (string_triple.contains("@")) {
 
 			if (string_triple.contains("@en")) {
@@ -248,11 +277,12 @@ public class Utils {
 			int count = 0;
 			char c[] = string_triple.toCharArray();
 			for (int i = 0; i < c.length; i++) {
-				if (!(c[i] >= 32 && c[i] <= 126)) {
+				if (!((c[i] >= 32 && c[i] <= 48)||(c[i] >= 64 && c[i] <= 126))) {
 					count += 1;
 				}
 			}
-			// 判断百分之80都是英文字母就属于英文
+			
+			// 判断百分之90都是英文字母或标点符号就属于英文
 			float pro = (c.length - count) / c.length;
 			if (pro > 0.9) {
 				return true;
