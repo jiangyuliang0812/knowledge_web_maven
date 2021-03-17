@@ -33,15 +33,17 @@ import java.sql.Statement;
 public class TriplesBusiness {
 
 	public static void main(String[] args) throws UnsupportedEncodingException {
-
+		
 		// 拿到商业模式数据
 		ArrayList<ArrayList<ArrayList<String>>> dataBusinessModel = getBusinessModel();
 		// System.out.println(dataBusinessModel);
 		ArrayList<ArrayList<String>> data_description = dataBusinessModel.get(0);
-		ArrayList<ArrayList<String>> data_company = dataBusinessModel.get(1);
+		ArrayList<ArrayList<String>> data_example = dataBusinessModel.get(1);
 		ArrayList<ArrayList<String>> data_selling = dataBusinessModel.get(2);
 		ArrayList<ArrayList<String>> data_advantage = dataBusinessModel.get(3);
-		ArrayList<ArrayList<String>> data_money = dataBusinessModel.get(4);
+		ArrayList<ArrayList<String>> data_focus = dataBusinessModel.get(4);
+		ArrayList<ArrayList<String>> data_who = dataBusinessModel.get(5);
+		ArrayList<ArrayList<String>> data_money = dataBusinessModel.get(6);
 		// System.out.println(data_description);
 		
 		// 用sparql来得到三元组 并存入
@@ -49,64 +51,86 @@ public class TriplesBusiness {
 		// Description
 		if (data_description != null) {
 			ArrayList<String> triples = new ArrayList<String>();
-			List predicatesList = Arrays.asList("type","subject");
+			List predicatesList = Arrays.asList("type","subject","primaryTopic","seeAlso","specialist");
 			String database_name = "triplesbedes";
 			String column_name = "triples_description";
-			triples = Utils.saveTriples(data_description,predicatesList,database_name,column_name);
-			System.out.println(triples);
+			Utils.saveTriples(data_description,predicatesList,database_name,column_name);
+			
 		}
 		
-		// Company
-		if (data_description != null) {
+		// Example
+		if (data_example != null) {
 			ArrayList<String> triples = new ArrayList<String>();
-			List predicatesList = Arrays.asList("type","subject");
-			String database_name = "triplesbecom";
-			String column_name = "triples_company";
-			triples = Utils.saveTriples(data_company,predicatesList,database_name,column_name);
-			System.out.println(triples);
+			List predicatesList = Arrays.asList("owners","founder","industry","product","manufacturer","brands","foundedBy","service","areaServed");
+			String database_name = "triplesbeexample";
+			String column_name = "triples_example";
+			Utils.saveTriples(data_example,predicatesList,database_name,column_name);
+			
 		}
 		
 		// Selling
 		if (data_selling != null) {
 			ArrayList<String> triples = new ArrayList<String>();
-			List predicatesList = Arrays.asList("type","subject");
+			List predicatesList = Arrays.asList("type","subject","primaryTopic","seeAlso","specialist");
 			String database_name = "triplesbesell";
 			String column_name = "triples_sell";
-			triples = Utils.saveTriples(data_selling,predicatesList,database_name,column_name);
-			System.out.println(triples);
+			Utils.saveTriples(data_selling,predicatesList,database_name,column_name);
+			
 		}
-
+		
 		// Advantage
 		if (data_advantage != null) {
 			ArrayList<String> triples = new ArrayList<String>();
-			List predicatesList = Arrays.asList("type","subject");
+			List predicatesList = Arrays.asList("type","subject","primaryTopic","seeAlso","specialist");
 			String database_name = "triplesbeadvan";
 			String column_name = "triples_advantage";
-			triples = Utils.saveTriples(data_advantage,predicatesList,database_name,column_name);
-			System.out.println(triples);
+			Utils.saveTriples(data_advantage,predicatesList,database_name,column_name);
+			
+		}
+		
+		// Focus
+		if (data_focus != null) {
+			ArrayList<String> triples = new ArrayList<String>();
+			List predicatesList = Arrays.asList("type","subject","primaryTopic","seeAlso","specialist");
+			String database_name = "triplesbefocus";
+			String column_name = "triples_focus";
+			Utils.saveTriples(data_focus,predicatesList,database_name,column_name);
+			
 		}
 
+		// Who
+		if (data_who != null) {
+			ArrayList<String> triples = new ArrayList<String>();
+			List predicatesList = Arrays.asList("type","subject","primaryTopic","seeAlso","specialist");
+			String database_name = "triplesbewho";
+			String column_name = "triples_who";
+			Utils.saveTriples(data_who,predicatesList,database_name,column_name);
+			
+		}
+		
 		// Money
 		if (data_money != null) {
 			ArrayList<String> triples = new ArrayList<String>();
-			List predicatesList = Arrays.asList("type","subject");
+			List predicatesList = Arrays.asList("type","subject","primaryTopic","seeAlso","specialist");
 			String database_name = "triplesbemoney";
 			String column_name = "triples_money";
-			triples = Utils.saveTriples(data_money,predicatesList,database_name,column_name);
-			System.out.println(triples);
+			Utils.saveTriples(data_money,predicatesList,database_name,column_name);
+			
 		}
 		
 	}
-
+	
 	public static ArrayList<ArrayList<ArrayList<String>>> getBusinessModel() {
 
 		Utils util = new Utils();
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ArrayList<ArrayList<String>> description_list = new ArrayList<ArrayList<String>>();
-		ArrayList<ArrayList<String>> company_list = new ArrayList<ArrayList<String>>();
+		ArrayList<ArrayList<String>> example_list = new ArrayList<ArrayList<String>>();
 		ArrayList<ArrayList<String>> selling_list = new ArrayList<ArrayList<String>>();
 		ArrayList<ArrayList<String>> advantage_list = new ArrayList<ArrayList<String>>();
+		ArrayList<ArrayList<String>> focus_list = new ArrayList<ArrayList<String>>();
+		ArrayList<ArrayList<String>> who_list = new ArrayList<ArrayList<String>>();
 		ArrayList<ArrayList<String>> money_list = new ArrayList<ArrayList<String>>();
 		ArrayList<ArrayList<ArrayList<String>>> result = new ArrayList<ArrayList<ArrayList<String>>>();
 
@@ -124,7 +148,7 @@ public class TriplesBusiness {
 			Statement statement = conn.createStatement();
 
 			// 编写查询语句
-			String sql = "SELECT id,name,keyword_description,company,what_you_selling,advantage,how_you_make_money FROM business;";
+			String sql = "SELECT id,name,keyword_description,example,what_you_selling,keyword_advantage,keyword_focus,who_you_sell_to,how_you_make_money FROM businessmodel;";
 
 			// Pre compilation
 			ps = conn.prepareStatement(sql);
@@ -135,25 +159,25 @@ public class TriplesBusiness {
 			// 添加数据
 			while (rs.next()) {
 				// HashMap的读取
-				//String id = rs.getString("id");
 				String id = String.valueOf(rs.getInt("id"));
-				String name = rs.getString("name");
-				String keyword_description = rs.getString("keyword_description");
-				String company = rs.getString("company");
+				String description = rs.getString("keyword_description");
+				String example = rs.getString("example");
 				String selling = rs.getString("what_you_selling");
-				String advantage = rs.getString("advantage");
+				String advantage = rs.getString("keyword_advantage");
+				String focus = rs.getString("keyword_focus");
+				String who = rs.getString("who_you_sell_to");
 				String money = rs.getString("how_you_make_money");
-
+				
 				ArrayList<String> description_unit = new ArrayList<String>();
 				description_unit.add(id);
-				description_unit.add(keyword_description);
+				description_unit.add(description);
 				description_list.add(description_unit);
-
-				ArrayList<String> company_unit = new ArrayList<String>();
-				company_unit.add(id);
-				company_unit.add(company);
-				company_list.add(company_unit);
 				
+				ArrayList<String> example_unit = new ArrayList<String>();
+				example_unit.add(id);
+				example_unit.add(example);
+				example_list.add(example_unit);
+					
 				ArrayList<String> selling_unit = new ArrayList<String>();
 				selling_unit.add(id);
 				selling_unit.add(selling);
@@ -164,18 +188,31 @@ public class TriplesBusiness {
 				advantage_unit.add(advantage);
 				advantage_list.add(advantage_unit);
 				
+				ArrayList<String> focus_unit = new ArrayList<String>();
+				focus_unit.add(id);
+				focus_unit.add(focus);
+				focus_list.add(focus_unit);
+				
+				ArrayList<String> who_unit = new ArrayList<String>();
+				who_unit.add(id);
+				who_unit.add(who);
+				who_list.add(who_unit);
+				
 				ArrayList<String> money_unit = new ArrayList<String>();
 				money_unit.add(id);
 				money_unit.add(money);
 				money_list.add(money_unit);
-
+				
 			}
+			
 			rs.close();
-
+			
 			result.add(description_list);
-			result.add(company_list);
+			result.add(example_list);
 			result.add(selling_list);
 			result.add(advantage_list);
+			result.add(focus_list);
+			result.add(who_list);
 			result.add(money_list);
 
 		} catch (Exception e) {

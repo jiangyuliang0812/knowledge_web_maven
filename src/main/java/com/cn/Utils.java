@@ -25,7 +25,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Utils {
-
+	
 	// use class Utils to get user, password ... from database
 	private static Properties properties = new Properties();
 	static {
@@ -37,20 +37,20 @@ public class Utils {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public static String getValue(String key) {
 		return properties.getProperty(key);
 	}
-
+	
 	// 查看每一个entity是否有三元组
-	public static ArrayList<String> saveTriples(ArrayList<ArrayList<String>> data, List predicatesList, String database_name, String column_name) throws UnsupportedEncodingException {
+	public static void saveTriples(ArrayList<ArrayList<String>> data, List predicatesList, String database_name, String column_name) throws UnsupportedEncodingException {
 		
-		ArrayList<String> triples = new ArrayList<String>();
 		String entity = "";
 		String entity_all_capital = "";
 		String entity_first_capital = "";
 		
 		for (int i = 0; i < data.size(); i++) {
+			ArrayList<String> triples = new ArrayList<String>();
 			ArrayList<String> unit = data.get(i);
 			String id = unit.get(0);
 			String words = unit.get(1);
@@ -74,7 +74,7 @@ public class Utils {
 				}	
 			}
 		}
-		return triples;
+		
 	}
 	
 	// 通过sparql语句来查找三元组，检查是否是英文，然后存入数据库
@@ -86,13 +86,13 @@ public class Utils {
                 + "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
                 + "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n" 
                 + "select ?y ?z where {dbr:" + entity + "  ?y ?z}";
-
+        
         // 执行SPARQL语句
         QueryExecution qexec = getResult(queryString);
-
+        
         // 新建一个动态数组
         ArrayList<String> triple = new ArrayList<String>();
-
+        
         try {
         	// 新建一个结果集 储存查询返回的结果
             ResultSet results = qexec.execSelect();
@@ -108,7 +108,7 @@ public class Utils {
             for (; results.hasNext();) {
             	
                 QuerySolution soln = results.nextSolution();
-
+                
                 // System.out.println(entity);
                 String s = entity;
                 String p = getElement(soln.get("?y").toString());
@@ -119,8 +119,8 @@ public class Utils {
 					int i = counter.get(p);
 					i = i + 1;
 					counter.put(p, i);
-					// System.out.println(counter.get(p));
-					if(counter.get(p) == 3){
+					
+					if(counter.get(p) == 1){
 					    for (Object item : predicates) {
 					        if (item.equals(p)) {	      
 					        	predicates.remove(item);
@@ -139,16 +139,16 @@ public class Utils {
                     
                     // 筛选一下，是否是英文
                     boolean b = tripleFilter(string_triple);
-                    if (b == true) {
-                    	// 去重处理，如果不包含再添加
-                        if (!triples.contains(string_triple)) {
-                            insert_database(database_name, column_name, id_business, p, string_triple);
-                            triples.add(string_triple);
-                            System.out.println(string_triple);
-                        }
+                    if (b == true) {  
+						// 去重处理，如果不包含再添加
+						if (!triples.contains(string_triple)) {
+							insert_database(database_name, column_name, id_business, p, string_triple);
+							triples.add(string_triple);
+							System.out.println(string_triple);
+						}
                     }
                     triple = new ArrayList<String>();
-
+                    
                 }
             }
 
@@ -160,14 +160,14 @@ public class Utils {
     
     // 将三元组存入数据库
     public static void insert_database(String database_name, String column_name, String id_business, String p, String triple) {
-
+    	
 		Utils util = new Utils();
 		Connection conn = null;
 		PreparedStatement ps = null;
-
+		
 		// 去掉大括号
 		triple = triple.replace("[", "").replace("]", ",").replace("_", " ");
-
+		
 		try {
 
 			// Connect to the database
@@ -220,10 +220,10 @@ public class Utils {
  	public static String allCapital(String entity) {
  		return entity.toUpperCase();
  	}
-
+ 	
  	// 首字母大写
  	public static String firstCapital(String entity) {
-
+ 		
  		char[] cs = entity.toCharArray();
  		int a = cs[0];
  		if (a >= 97 && a <= 122) {
@@ -242,7 +242,7 @@ public class Utils {
 		QueryExecution qexec = QueryExecutionFactory.sparqlService("https://dbpedia.org/sparql", query);
 		return qexec;
 	}
-
+	
 	// 过滤结果
 	public static String getElement(String res) {
 		// 把结尾的en去掉
@@ -262,18 +262,18 @@ public class Utils {
 	
 	// 英文过滤函数 只是判断
 	public static boolean tripleFilter(String string_triple) {
-
+		
 		// 判断如果有@,那么只能@en
 		if (string_triple.contains("@")) {
-
+			
 			if (string_triple.contains("@en")) {
 				return true;
 			} else {
 				return false;
 			}
-
+			
 		} else {
-
+			
 			int count = 0;
 			char c[] = string_triple.toCharArray();
 			for (int i = 0; i < c.length; i++) {

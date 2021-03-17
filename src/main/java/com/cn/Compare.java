@@ -15,16 +15,14 @@ import java.util.Map;
 public class Compare {
 	
 	public static void main(String[] args) throws IOException {
-		
 		getSimilarity();
-		
 	}
 
 	public static Map<String, Float> getSimilarity() throws IOException {
 		
 		// 得到所有BusinessModel
 		Map<String, Map<String, List>> result_bm = getBusinessModel();
-		
+		// System.out.println(result_bm);
 		
 		// 得到最新一条Idea
 		Map<String, List> result_idea = getIdea();
@@ -33,40 +31,43 @@ public class Compare {
 		// 对比一条Idea和所有的BusinessModel
 		Map<String, List> result_sim = new HashMap<>();
 		
+		// 查看对比次数
+		int number_of_comparison = 0;
+		
 		// 这个for循环得到idea的结果集
 		for(Map.Entry<String, List> idea : result_idea.entrySet()){
 			
 		    String predicate_idea = idea.getKey();
 		    List Triples_idea = idea.getValue();
 		    
-		    String text_idea = String.join(" ",Triples_idea);
+		    String text_idea = String.join(" ",Triples_idea).replace(",,", ",");
 		    
 		 	// 这个for循环得到了所有商业模式的结果集
 		    for (Map.Entry<String, Map<String, List>> bm : result_bm.entrySet()){
 		    	String bm_Id = bm.getKey();
+		    	Map<String, List> bm_units =bm.getValue(); //这个数据结构和idea的结构一样
 		    	boolean flag = true;
 		    	
 		    	// 这个for得到了一个单位的商业模式
-		    	for(Map.Entry<String, List> bm_unit : bm.getValue().entrySet()){
+		    	for(Map.Entry<String, List> bm_unit : bm_units.entrySet()){
 		    		String predicate_bm = bm_unit.getKey();
 				    List Triples_bm = bm_unit.getValue();
 				    
 				    if (predicate_idea.equals(predicate_bm)){
 				    	
 				    	String text_bm = String.join(" ",Triples_bm).replace(",,", ",");
-				    	System.out.println(text_idea);
-				    	System.out.println(text_bm);
+				    	System.out.printf("triples of idea %s :",text_idea +"\n");
+				    	System.out.printf("triples of bm %s :",text_bm +"\n");
 				    	float sim = SimCacu.Dandelion(text_idea,text_bm);
+				    	number_of_comparison++;
 				    	flag = false;
-				    	
-				    	System.out.println(predicate_idea);
-				    	System.out.println(bm_Id);
-				    	System.out.println(sim);
+				    	System.out.printf("predicate : %s. bm_id : %s.",predicate_idea,bm_Id +"\n");
+				    	System.out.println("Similarity" + sim);
 				    	
 				    	if (result_sim.containsKey(bm_Id)) {
 							List tem_list = result_sim.get(bm_Id);	
 							tem_list.add(sim);
-							result_sim.put(bm_Id, tem_list);	
+							// result_sim.put(bm_Id, tem_list);	
 						} else {
 							List tem_list = new ArrayList();
 							tem_list.add(sim);
@@ -75,11 +76,10 @@ public class Compare {
 				    	break;
 				    }
 		    	}
+		    	
 		    	if(flag){
-		    		
-		    		System.out.println(predicate_idea);
-			    	System.out.println(bm_Id);
-			    	System.out.println(0);
+
+			    	System.out.printf("No triples with predicate %s found in the business model %s.",predicate_idea,bm_Id +"\n");
 			    	
 			    }
 		    }
@@ -87,9 +87,8 @@ public class Compare {
 		}
 		
 		// 处理相似度结果
-		System.out.println(result_sim);
 		
-		// 这个for循环为了找到result里最长的list 先遍历map 然后得到最长的list
+		// 这个for循环为了找到result里最长的list 先遍历map 然后得到最长的list 有几个元素就说明有几个谓语
 		int size = 0;
 		for(Map.Entry<String, List> result_similarity : result_sim.entrySet()){
 			List simList = result_similarity.getValue();
@@ -98,6 +97,7 @@ public class Compare {
 				size = simList.size();
 			}		
 		}
+		System.out.printf("There are %d predicates in idea",size);
 		
 		float sum = 0;
 		
@@ -114,10 +114,11 @@ public class Compare {
 			sum = sum/size;
 			sim_final.put(business_id, sum);
 			sum = 0;	 
-
+			
 		}
 		
-		System.out.println(sim_final);
+		System.out.println("Similarity : "+ sim_final);
+    	System.out.println("Number of comparison : "+ number_of_comparison);
 		return sim_final;
 		
 	}
@@ -131,6 +132,8 @@ public class Compare {
 		PreparedStatement ps3 = null;
 		PreparedStatement ps4 = null;
 		PreparedStatement ps5 = null;
+		PreparedStatement ps6 = null;
+		PreparedStatement ps7 = null;
 		
 		Map<String, Map<String, List>> result = new HashMap<>();
 
@@ -147,66 +150,42 @@ public class Compare {
 
 			Statement statement = conn.createStatement();
 			
-			// 编写查询语句
-			String sql_com = "SELECT triples_company,predicate,id_business FROM triplesbecom;";
+			// 编写查询语句	
 			String sql_des = "SELECT triples_description,predicate,id_business FROM triplesbedes;";
+			String sql_exa = "SELECT triples_example,predicate,id_business FROM triplesbeexample;";
 			String sql_sell = "SELECT triples_sell,predicate,id_business FROM triplesbesell;";
 			String sql_advan = "SELECT triples_advantage,predicate,id_business FROM triplesbeadvan;";
+			String sql_focus = "SELECT triples_focus,predicate,id_business FROM triplesbefocus;";
+			String sql_who = "SELECT triples_who,predicate,id_business FROM triplesbewho;";
 			String sql_money = "SELECT triples_money,predicate,id_business FROM triplesbemoney;";
-
+			
 			// Pre compilation
-			ps1 = conn.prepareStatement(sql_com);
-			ps2 = conn.prepareStatement(sql_des);
+
+			ps1 = conn.prepareStatement(sql_des);
+			ps2 = conn.prepareStatement(sql_exa);
 			ps3 = conn.prepareStatement(sql_sell);
 			ps4 = conn.prepareStatement(sql_advan);
-			ps5 = conn.prepareStatement(sql_money);
+			ps5 = conn.prepareStatement(sql_focus);
+			ps6 = conn.prepareStatement(sql_who);
+			ps7 = conn.prepareStatement(sql_money);
 			
 
 			// 执行查询语句 把查询到的数据存在 结果集 中 ResultSet
-			java.sql.ResultSet rs1 = ps1.executeQuery(sql_com);
-			java.sql.ResultSet rs2 = ps2.executeQuery(sql_des);
+			java.sql.ResultSet rs1 = ps1.executeQuery(sql_des);
+			java.sql.ResultSet rs2 = ps2.executeQuery(sql_exa);
 			java.sql.ResultSet rs3 = ps3.executeQuery(sql_sell);
 			java.sql.ResultSet rs4 = ps4.executeQuery(sql_advan);
-			java.sql.ResultSet rs5 = ps5.executeQuery(sql_money);
+			java.sql.ResultSet rs5 = ps5.executeQuery(sql_focus);
+			java.sql.ResultSet rs6 = ps6.executeQuery(sql_who);
+			java.sql.ResultSet rs7 = ps7.executeQuery(sql_money);
+		
 			
 			// 添加数据
 			while (rs1.next()) {
 				// HashMap的读取 通过get拿到rs结果集里的数据
 				String id_business = String.valueOf(rs1.getInt("id_business"));
 				String predicate = rs1.getString("predicate");
-				String triples_company = rs1.getString("triples_company");
-
-				// 利用containsKey()方法来判断是否存在某个键
-				if (result.containsKey(id_business)) {
-					Map<String, List> tem_map = result.get(id_business);
-					if (tem_map.containsKey(predicate)) {
-						List tem_list = tem_map.get(predicate);
-						// System.out.println(tem_list);
-						// Map数据类型就能直接添加到找到的list里，不需要再put
-						tem_list.add(triples_company);
-						
-					} else {
-						List tem_list = new ArrayList();
-						tem_list.add(triples_company);
-						tem_map.put(predicate, tem_list);
-						
-					}
-				} else {
-					Map<String, List> tem_map = new HashMap<>();
-					List tem_list = new ArrayList();
-					tem_list.add(triples_company);
-					tem_map.put(predicate, tem_list);
-					result.put(id_business, tem_map);
-				}
-
-			}
-			
-			// 添加数据
-			while (rs2.next()) {
-				// HashMap的读取 通过get拿到rs结果集里的数据
-				String id_business = String.valueOf(rs2.getInt("id_business"));
-				String predicate = rs2.getString("predicate");
-				String triples_description = rs2.getString("triples_description");
+				String triples_description = rs1.getString("triples_description");
 
 				// 利用containsKey()方法来判断是否存在某个键
 				if (result.containsKey(id_business)) {
@@ -226,6 +205,38 @@ public class Compare {
 					Map<String, List> tem_map = new HashMap<>();
 					List tem_list = new ArrayList();
 					tem_list.add(triples_description);
+					tem_map.put(predicate, tem_list);
+					result.put(id_business, tem_map);
+				}
+				
+			}
+			
+			// 添加数据
+			while (rs2.next()) {
+				// HashMap的读取 通过get拿到rs结果集里的数据
+				String id_business = String.valueOf(rs2.getInt("id_business"));
+				String predicate = rs2.getString("predicate");
+				String triples_example = rs2.getString("triples_example");
+
+				// 利用containsKey()方法来判断是否存在某个键
+				if (result.containsKey(id_business)) {
+					Map<String, List> tem_map = result.get(id_business);
+					if (tem_map.containsKey(predicate)) {
+						List tem_list = tem_map.get(predicate);
+						// System.out.println(tem_list);
+						// Map数据类型就能直接添加到找到的list里，不需要再put
+						tem_list.add(triples_example);
+						
+					} else {
+						List tem_list = new ArrayList();
+						tem_list.add(triples_example);
+						tem_map.put(predicate, tem_list);
+						
+					}
+				} else {
+					Map<String, List> tem_map = new HashMap<>();
+					List tem_list = new ArrayList();
+					tem_list.add(triples_example);
 					tem_map.put(predicate, tem_list);
 					result.put(id_business, tem_map);
 				}
@@ -299,7 +310,69 @@ public class Compare {
 				// HashMap的读取 通过get拿到rs结果集里的数据
 				String id_business = String.valueOf(rs5.getInt("id_business"));
 				String predicate = rs5.getString("predicate");
-				String triples_money = rs5.getString("triples_money");
+				String triples_focus = rs5.getString("triples_focus");
+
+				// 利用containsKey()方法来判断是否存在某个键
+				if (result.containsKey(id_business)) {
+					Map<String, List> tem_map = result.get(id_business);
+					if (tem_map.containsKey(predicate)) {
+						List tem_list = tem_map.get(predicate);
+						// System.out.println(tem_list);
+						tem_list.add(triples_focus);
+						
+						
+					} else {
+						List tem_list = new ArrayList();
+						tem_list.add(triples_focus);
+						tem_map.put(predicate, tem_list);
+					}
+				} else {
+					Map<String, List> tem_map = new HashMap<>();
+					List tem_list = new ArrayList();
+					tem_list.add(triples_focus);
+					tem_map.put(predicate, tem_list);
+					result.put(id_business, tem_map);
+				}
+
+			}
+			
+			// 添加数据
+			while (rs6.next()) {
+				// HashMap的读取 通过get拿到rs结果集里的数据
+				String id_business = String.valueOf(rs6.getInt("id_business"));
+				String predicate = rs6.getString("predicate");
+				String triples_who = rs6.getString("triples_who");
+
+				// 利用containsKey()方法来判断是否存在某个键
+				if (result.containsKey(id_business)) {
+					Map<String, List> tem_map = result.get(id_business);
+					if (tem_map.containsKey(predicate)) {
+						List tem_list = tem_map.get(predicate);
+						// System.out.println(tem_list);
+						tem_list.add(triples_who);
+						
+					} else {
+						List tem_list = new ArrayList();
+						tem_list.add(triples_who);
+						tem_map.put(predicate, tem_list);
+						
+					}
+				} else {
+					Map<String, List> tem_map = new HashMap<>();
+					List tem_list = new ArrayList();
+					tem_list.add(triples_who);
+					tem_map.put(predicate, tem_list);
+					result.put(id_business, tem_map);
+				}
+
+			}
+			
+			// 添加数据
+			while (rs7.next()) {
+				// HashMap的读取 通过get拿到rs结果集里的数据
+				String id_business = String.valueOf(rs7.getInt("id_business"));
+				String predicate = rs7.getString("predicate");
+				String triples_money = rs7.getString("triples_money");
 
 				// 利用containsKey()方法来判断是否存在某个键
 				if (result.containsKey(id_business)) {
@@ -330,6 +403,9 @@ public class Compare {
 			rs3.close();
 			rs4.close();
 			rs5.close();
+			rs6.close();
+			rs7.close();
+
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -352,6 +428,12 @@ public class Compare {
 				}
 				if (ps5 != null) {
 					ps5.close();
+				}
+				if (ps6 != null) {
+					ps6.close();
+				}
+				if (ps7 != null) {
+					ps7.close();
 				}
 				if (conn != null) {
 					conn.close();
@@ -386,10 +468,10 @@ public class Compare {
 
 			Statement statement = conn.createStatement();
 			
-
+			
 			// 编写查询语句 得到最大index的idea
 			String sql = "SELECT triples_idea,predicate,id_idea FROM triplesidea where id_idea = (SELECT max(id_idea) FROM triplesidea);";
-
+			
 			// Pre compilation
 			ps = conn.prepareStatement(sql);
 
@@ -398,6 +480,7 @@ public class Compare {
 
 			// 添加数据
 			while (rs.next()) {
+				
 				// HashMap的读取 通过get拿到rs结果集里的数据
 				String id_idea = String.valueOf(rs.getInt("id_idea"));
 				String predicate = rs.getString("predicate");

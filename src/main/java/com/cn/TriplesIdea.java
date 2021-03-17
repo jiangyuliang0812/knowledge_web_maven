@@ -51,7 +51,7 @@ public class TriplesIdea extends HttpServlet {
 		String entity_first_capital = "";
 
 		try {
-
+			
 			if (data_keyword_idea != null) {
 
 				for (int i = 0; i < data_keyword_idea.size(); i++) {
@@ -75,14 +75,14 @@ public class TriplesIdea extends HttpServlet {
 					}
 				}
 			}
-
+			
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
-
+	
 	public static ArrayList<ArrayList<String>> getKeywordIdea() {
 
 		Utils util = new Utils();
@@ -112,7 +112,7 @@ public class TriplesIdea extends HttpServlet {
 
 			// 执行查询语句 把查询到的数据存在 结果集 中 ResultSet
 			java.sql.ResultSet rs = ps.executeQuery(sql);
-
+			
 			// 添加数据
 			while (rs.next()) {
 				// HashMap的读取
@@ -153,61 +153,73 @@ public class TriplesIdea extends HttpServlet {
 
 	public static ArrayList<String> getTriples_idea(String entity, ArrayList<String> triples, String id_idea)
 			throws UnsupportedEncodingException {
-		// SPARQL的语法
-		String queryString = "prefix dbr: <http://dbpedia.org/resource/>\n"
+	
+		// 头实体
+		String queryString1 = "prefix dbr: <http://dbpedia.org/resource/>\n"
 				+ "PREFIX dbo: <http://dbpedia.org/ontology/>\n"
 				+ "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
 				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n" + "select ?y ?z where {dbr:" + entity + " ?y" + " ?z}";
-		// 97 - 122
+		
+		
+		// 尾实体
+		String queryString2 = "prefix dbr: <http://dbpedia.org/resource/>\n"
+				+ "PREFIX dbo: <http://dbpedia.org/ontology/>\n"
+				+ "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
+				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n" + "select ?x ?y where {?x " + " ?y  dbr:" + entity + "}";
+		
 
 		// 执行SPARQL语句
-		QueryExecution qexec = Utils.getResult(queryString);
+		QueryExecution qexec1 = Utils.getResult(queryString1);
+		QueryExecution qexec2 = Utils.getResult(queryString2);
 
 		// 新建一个动态数组
 		ArrayList<String> triple = new ArrayList<String>();
 
 		try {
-			// 新建一个结果集 储存查询返回的结果
-			ResultSet results = qexec.execSelect();
 			
-			Map<String, Integer> counter = new HashMap<>();
-	        counter.put("type", 0);
-	        counter.put("subject", 0);
-	        List predicatesList = Arrays.asList("type","subject");
+			// 新建一个结果集 储存查询返回的结果
+			ResultSet results1 = qexec1.execSelect();
+	        
+	        List predicatesList1 = Arrays.asList("type","subject","primaryTopic","seeAlso","specialist","industry","product","manufacturer","owners","founder","foundedBy","brands","service","areaServed","owner");
+           
+	        Map<String, Integer> counter1 = new HashMap<>();
+	        // 变成arrayList才能做删除操作
+	        List predicates1 = new ArrayList(predicatesList1);
+            for(int i = 0; i < predicates1.size(); i ++){
+                String predicate = (String) predicates1.get(i);
+                counter1.put(predicate, 0);             
+            }
 	        
 	        // 变成arrayList才能做删除操作
-	        List predicates = new ArrayList(predicatesList);
+	       
 	        
 			// hasNext是判断是否还有下个元素 。
-			for (; results.hasNext();) {
-				QuerySolution soln = results.nextSolution();
+			for (; results1.hasNext();) {
+				QuerySolution soln = results1.nextSolution();
 
 				// System.out.println(entity);
 				String s = entity;
 				String p = Utils.getElement(soln.get("?y").toString());
 				String o = Utils.getElement(soln.get("?z").toString());
 				
-				// List predicates = Arrays.asList("label","product","industry","service","brands","manufacturer","subject","comment","abstract");
 				
-				if (predicates.contains(p) && (o != null && o.length() != 0)) {
+				if (predicates1.contains(p) && (o != null && o.length() != 0)) {
 					
-					int i = counter.get(p);
+					int i = counter1.get(p);
 					i = i + 1;
-					counter.put(p, i);
+					counter1.put(p, i);
 					// System.out.println(counter.get(p));
-					if(counter.get(p) == 3){
-					    for (Object item : predicates) {
+					if(counter1.get(p) == 3){
+					    for (Object item : predicates1) {
 					        if (item.equals(p)) {	      
-					        	predicates.remove(item);
+					        	predicates1.remove(item);
 					            break;
 					        }
 					    }			   
-					}
-					
+					}	
 					triple.add(s);
 					triple.add(p);
 					triple.add(o);
-
 					// 因为要将三元组整体存到表中，所以从arrayList变成String
 					String string_triple = String.valueOf(triple);
 					string_triple = string_triple.replace(",", " ");
@@ -219,16 +231,74 @@ public class TriplesIdea extends HttpServlet {
 						if (!triples.contains(string_triple)) {
 							triples.add(string_triple);
 							insert_idea(string_triple, p, id_idea);
-							System.out.println(string_triple);
+							// System.out.println(string_triple);
 						}
 					}
 					triple = new ArrayList<String>();
+				}
+			}
+			
+			// 新建一个结果集 储存查询返回的结果
+			ResultSet results2 = qexec2.execSelect();
+			
+	        List predicatesList2 = Arrays.asList("type","subject","primaryTopic","seeAlso","specialist","industry","product","manufacturer","owners","founder","foundedBy","brands","service","areaServed","owner");
+	           
+	        Map<String, Integer> counter2 = new HashMap<>();
+	        // 变成arrayList才能做删除操作
+	        List predicates2 = new ArrayList(predicatesList2);
+            for(int i = 0; i < predicates2.size(); i ++){
+                String predicate = (String) predicates2.get(i);
+                counter2.put(predicate, 0);             
+            }
+            
+			// hasNext是判断是否还有下个元素 。
+			for (; results2.hasNext();) {
+				QuerySolution soln = results2.nextSolution();
 
+				// System.out.println(entity);
+				String s = Utils.getElement(soln.get("?x").toString());
+				String p = Utils.getElement(soln.get("?y").toString());
+				String o = entity;
+				
+				
+				if (predicates2.contains(p) && (s != null && s.length() != 0)) {
+					
+					int i = counter2.get(p);
+					i = i + 1;
+					counter2.put(p, i);
+					// System.out.println(counter.get(p));
+					if(counter2.get(p) == 3){
+					    for (Object item : predicates2) {
+					        if (item.equals(p)) {	      
+					        	predicates2.remove(item);
+					            break;
+					        }
+					    }			   
+					}	
+					triple.add(s);
+					triple.add(p);
+					triple.add(o);
+					// 因为要将三元组整体存到表中，所以从arrayList变成String
+					String string_triple = String.valueOf(triple);
+					string_triple = string_triple.replace(",", " ");
+
+					// 检查是否是英文
+					boolean b = Utils.tripleFilter(string_triple);
+					if (b == true) {
+						// 去重处理，如果不包含再添加
+						if (!triples.contains(string_triple)) {
+							triples.add(string_triple);
+							insert_idea(string_triple, p, id_idea);
+							// System.out.println(string_triple);
+						}
+					}
+					triple = new ArrayList<String>();
 				}
 			}
 
 		} finally {
-			qexec.close();
+			qexec1.close();
+			qexec2.close();
 		}
 		return triples;
 	}

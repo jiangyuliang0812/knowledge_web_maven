@@ -13,7 +13,7 @@
 	<style>
 		body {
 			background-color: #F1FAFA;
-			font-size: 16;
+			font-size: 25;
 			width: 90%;
 			margin: auto;
 			border: 10px;
@@ -32,10 +32,28 @@
 			color: black;
 			font-size: 40px
 		}
+		
+		h2 {
+            color: black ; 
+            font-size:30px;
+        }
 
 		p {
-			font-size: 20px
+			font-size: 25px
 		}
+		
+		form {
+       		display: inline;
+    	}
+
+		input {
+        	width: 100px; height: 30px; font-weight:bold;
+   		}
+		
+		#des {
+			margin-left:50px;
+		}
+   		
 	</style>
 
 </head>
@@ -44,9 +62,9 @@
 
 	<h1> Business models </h1>
 
-	<p>
+	<h2>
 		We have found the following business models that suit your idea!
-	</p>
+	</h2>
 	
 	<%
 		
@@ -61,44 +79,45 @@
 	<hr>
 
 	<p>
-		1 : The business model <%=bm1.getName()%> is <%=bm1.getSimilarity()%> similar to your idea
+		1 : The business model <%=bm1.getName()%> is <%=bm1.getSimilarity()%> % similar to your idea
 	</p>
 
-	<p>
+	<p id="des">
 		Description : <%=bm1.getDescription()%>
 	</p>
 
 	<br>
 	<hr>
-	<br>
+
 
 	<p>
-		2 : The business model <%=bm2.getName()%> is <%=bm2.getSimilarity()%> similar to your idea
+		2 : The business model <%=bm2.getName()%> is <%=bm2.getSimilarity()%> % similar to your idea
 	</p>
 
-	<p>
+	<p id="des">
 		Description : <%=bm2.getDescription()%>
 	</p>
 
 	<br>
 	<hr>
-	<br>
+	
 
 	<p>
-		3 : The business model <%=bm3.getName()%> is <%=bm3.getSimilarity()%> similar to your idea
+		3 : The business model <%=bm3.getName()%> is <%=bm3.getSimilarity()%> % similar to your idea
 	</p>
 
-	<p>
+	<p id="des">
 		Description : <%=bm3.getDescription()%>
 	</p>
 
 
-
-
-	<br>
 	<br>
 	<hr>
 	<br>
+
+	<form>	
+		<input type="button" value ="Evaluate" onclick = "window.location.href ='ThirdPage.jsp'">
+	</form>
 
 
 </body>

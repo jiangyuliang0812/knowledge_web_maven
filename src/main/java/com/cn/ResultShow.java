@@ -3,6 +3,7 @@ package com.cn;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -51,7 +52,16 @@ public class ResultShow extends HttpServlet {
 		
 		List<BusinessModel> list_bm = new ArrayList<BusinessModel>();
 		
-		//从大到小排序字符串，得到三个 和他的index
+		// 对相似度处理，以便显示在UI上
+		for(int i = 0; i < similarities.size(); i++){
+			float tem_sim = similarities.get(i);
+			tem_sim = tem_sim * 100;
+			DecimalFormat df = new DecimalFormat("#.##");
+			tem_sim =  Float.valueOf(df.format(tem_sim));
+			similarities.set(i,tem_sim);
+		}
+		
+		// 从大到小排序字符串，得到三个 和他的index
 		for(int i = 0; i < 3; i++){
 			
 			float sim = Collections.max(similarities);
@@ -92,7 +102,7 @@ public class ResultShow extends HttpServlet {
 			conn = DriverManager.getConnection(url, user, password);
 
 			// Select
-			String sql = "SELECT name, description FROM business WHERE id = '" + id + "'";
+			String sql = "SELECT name, description FROM businessmodel WHERE id = '" + id + "'";
 
 			// Pre compilation
 			ps = conn.prepareStatement(sql);

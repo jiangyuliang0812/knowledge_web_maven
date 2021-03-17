@@ -14,13 +14,13 @@
     <style>
     body {
         background-color: #F1FAFA;
-        font-size: 16;
+        font-size: 20;
         width: 90%;
         margin: auto;
         border: 10px;
         padding: 12px;
     }
-
+	
     #container{
         width: 1000px;
         height: 450px;
@@ -28,7 +28,7 @@
         padding: 5px;
         margin: 5px;
     }
-
+	
     #outside{
         height: 400px;
         width: 500px;
@@ -125,6 +125,7 @@
         
 		<br>
 	  	<hr>
+	  	<br>
 	  	
         <table border="1">
             <tr>
