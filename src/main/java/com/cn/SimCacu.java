@@ -44,15 +44,15 @@ public class SimCacu {
 		// TODO Auto-generated method stub
 
 		String token = "31d664bec47a44ba9857e0fbfe3c38b7";
-
+		
 		URL url = new URL("https://api.dandelion.eu/datatxt/sim/v1/?text1=" + text1.replace(" ", "%20") + "&text2="
 				+ text2.replace(" ", "%20") + "&token=" + token + "&lang=en");
-
+		
 		HttpURLConnection urlcon = (HttpURLConnection) url.openConnection();
 		urlcon.connect(); // 获取连接
 		InputStream is = urlcon.getInputStream();
 		BufferedReader buffer = new BufferedReader(new InputStreamReader(is));
-
+		
 		String l = null;
 		String result = null;
 		float similarity = 0;
@@ -68,7 +68,7 @@ public class SimCacu {
 		}
 		return similarity;
 	}
-
+	
 	// 提取数据库里的数据 这里是最新的一条数据
 	public static ArrayList<String> selectMySQl_triple() {
 
@@ -139,7 +139,4 @@ public class SimCacu {
 
 	}
 
-	// 第一步 拿资格triple 和description
-	// 第二步 先改变形态 动词转原形，名词转单数和小写
-	// 第三步 对比
 }

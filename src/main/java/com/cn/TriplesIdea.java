@@ -174,7 +174,7 @@ public class TriplesIdea extends HttpServlet {
 
 		// 新建一个动态数组
 		ArrayList<String> triple = new ArrayList<String>();
-
+		
 		try {
 			
 			// 新建一个结果集 储存查询返回的结果
@@ -281,7 +281,7 @@ public class TriplesIdea extends HttpServlet {
 					// 因为要将三元组整体存到表中，所以从arrayList变成String
 					String string_triple = String.valueOf(triple);
 					string_triple = string_triple.replace(",", " ");
-
+						
 					// 检查是否是英文
 					boolean b = Utils.tripleFilter(string_triple);
 					if (b == true) {

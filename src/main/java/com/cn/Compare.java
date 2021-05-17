@@ -17,7 +17,7 @@ public class Compare {
 	public static void main(String[] args) throws IOException {
 		getSimilarity();
 	}
-
+	
 	public static Map<String, Float> getSimilarity() throws IOException {
 		
 		// 得到所有BusinessModel
@@ -56,13 +56,13 @@ public class Compare {
 				    if (predicate_idea.equals(predicate_bm)){
 				    	
 				    	String text_bm = String.join(" ",Triples_bm).replace(",,", ",");
-				    	System.out.printf("triples of idea %s :",text_idea +"\n");
-				    	System.out.printf("triples of bm %s :",text_bm +"\n");
+				    	// System.out.printf("triples of idea : %s",text_idea +"\n");
+				    	// System.out.printf("triples of bm : %s ",text_bm +"\n");
 				    	float sim = SimCacu.Dandelion(text_idea,text_bm);
 				    	number_of_comparison++;
 				    	flag = false;
-				    	System.out.printf("predicate : %s. bm_id : %s.",predicate_idea,bm_Id +"\n");
-				    	System.out.println("Similarity" + sim);
+				    	// System.out.printf("predicate : %s. bm_id : %s",predicate_idea,bm_Id +"\n");
+				    	// System.out.println("Similarity" + sim);
 				    	
 				    	if (result_sim.containsKey(bm_Id)) {
 							List tem_list = result_sim.get(bm_Id);	
@@ -78,8 +78,8 @@ public class Compare {
 		    	}
 		    	
 		    	if(flag){
-
-			    	System.out.printf("No triples with predicate %s found in the business model %s.",predicate_idea,bm_Id +"\n");
+		    		
+			    	// System.out.printf("No triples with predicate %s found in the business model %s",predicate_idea,bm_Id +"\n");
 			    	
 			    }
 		    }
@@ -97,7 +97,8 @@ public class Compare {
 				size = simList.size();
 			}		
 		}
-		System.out.printf("There are %d predicates in idea",size);
+		
+		System.out.println(size + " predicates are found in idea."); 
 		
 		float sum = 0;
 		
@@ -114,7 +115,6 @@ public class Compare {
 			sum = sum/size;
 			sim_final.put(business_id, sum);
 			sum = 0;	 
-			
 		}
 		
 		System.out.println("Similarity : "+ sim_final);
@@ -240,7 +240,7 @@ public class Compare {
 					tem_map.put(predicate, tem_list);
 					result.put(id_business, tem_map);
 				}
-
+				
 			}
 			
 			// 添加数据

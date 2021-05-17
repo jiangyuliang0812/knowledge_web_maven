@@ -20,18 +20,6 @@ public class Inflector {
 		initialize();
 	}
 
-//	public static void main(String[] args) {
-//		// TODO Auto-generated method stub
-	
-//		// Singular to plural
-//		System.out.println(Inflector.getInstance().pluralize("water"));
-//		System.out.println(Inflector.getInstance().pluralize("box"));
-//		System.out.println(Inflector.getInstance().pluralize("tomato"));
-
-//		// Plural to singular
-//		System.out.println(Inflector.getInstance().singularize("apples"));
-//	}
-
 	private void initialize() {
 		plural("$", "s");
 		plural("s$", "s");

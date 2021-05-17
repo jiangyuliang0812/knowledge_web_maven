@@ -60,7 +60,7 @@ public class DataInsert {
 		Utils util = new Utils();
 		Connection conn = null;
 		PreparedStatement ps = null;
-
+		
 		try {
 			// get Keywords
 			String keywords = KeyWords.getKeywords(idea);

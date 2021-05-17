@@ -31,7 +31,7 @@ import edu.stanford.nlp.util.CoreMap;
 public class KeyWords {
 	
 	public static void main(String[] args) throws MonkeyLearnException {
-		String text = "Many burglars break into retail stores, offices, or houses by crashing a window. TCO could be prevented by putting electricity on the glass wall, as soon as the owner is no longer at home, or the shop is closed, or best when the alarm is set up. This way, if a burgler tries to break the glass-window, he/she gets shocked by electricity.";
+		String text = "Tour guide is a very good job, but in the future, if there is a tour guide mobile app, when people walk to a tourist attraction, the mobile app can introduce the corresponding tourist attraction based on GPS positioning, and the mobile app will make money through advertising, such as recommending hotels and restaurants.";
 		String result = getKeywords(text);
 		System.out.print(result);
 	}
@@ -61,7 +61,7 @@ public class KeyWords {
 					if (!keyWordsList_text.contains(key_word_text)){
 						keyWordsList_text.add(key_word_text);
 					}
-		        }
+			 }
 		}
 		
 		/*
@@ -115,7 +115,7 @@ public class KeyWords {
         ArrayList result = res.arrayResult;
         // System.out.println(result);
        
-        /*
+        
         // Query remaining times
         Header[][] headers = res.headers;
         for (Header[] header : headers) {
@@ -124,7 +124,7 @@ public class KeyWords {
         	}
         }
         System.out.println(headers.toString());
-      	*/
+      	
         
         // X-Query-Limit-Limit  您当前的查询限制。
         // X-Query-Limit-Remaining 您的帐户可以使用的查询数量。

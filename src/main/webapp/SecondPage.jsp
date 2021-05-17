@@ -67,7 +67,6 @@
 	</h2>
 	
 	<%
-		
 		List<BusinessModel> list_bm = (List<BusinessModel>)session.getAttribute("list_bm");
 		BusinessModel bm1 = list_bm.get(0);
 		BusinessModel bm2 = list_bm.get(1);

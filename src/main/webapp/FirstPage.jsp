@@ -4,7 +4,6 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-
 <html>
 
     <head>
@@ -86,7 +85,7 @@
         <p>
             Welcome user ! 
             <br> 
-            We are searching for innovative solutions for the security of city building.
+            We are searching for innovative ideas.
         </p>
     
         <hr>

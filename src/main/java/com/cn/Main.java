@@ -32,7 +32,7 @@ public class Main extends HttpServlet {
 		// get suitable business models according to similarity and index
 		List<BusinessModel> list_bm = ResultShow.showBusinessModel(similarity);
 		
-		// Put list into jsp
+		// Put list into front end
 		HttpSession session = req.getSession();
 		session.setAttribute("list_bm", list_bm);
 		
