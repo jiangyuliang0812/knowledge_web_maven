@@ -65,6 +65,10 @@ public class DataInsert {
 			// get Keywords
 			String keywords = KeyWords.getKeywords(idea);
 			
+			System.out.printf("\n");
+			System.out.println("Keywords extracted from idea text:");
+			System.out.println(keywords);
+			
 			// Connect to the database
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			

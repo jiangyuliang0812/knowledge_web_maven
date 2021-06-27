@@ -78,7 +78,7 @@
 	<hr>
 
 	<p>
-		1 : The business model <%=bm1.getName()%> is <%=bm1.getSimilarity()%> % similar to your idea
+		1 : The business model <%=bm1.getName()%> has <%=bm1.getSimilarity()%> % similar to your idea.
 	</p>
 
 	<p id="des">
@@ -90,7 +90,7 @@
 
 
 	<p>
-		2 : The business model <%=bm2.getName()%> is <%=bm2.getSimilarity()%> % similar to your idea
+		2 : The business model <%=bm2.getName()%> has <%=bm2.getSimilarity()%> % similar to your idea.
 	</p>
 
 	<p id="des">
@@ -102,7 +102,7 @@
 	
 
 	<p>
-		3 : The business model <%=bm3.getName()%> is <%=bm3.getSimilarity()%> % similar to your idea
+		3 : The business model <%=bm3.getName()%> has <%=bm3.getSimilarity()%> % similar to your idea.
 	</p>
 
 	<p id="des">

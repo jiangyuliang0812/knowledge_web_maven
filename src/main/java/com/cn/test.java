@@ -16,7 +16,8 @@ public class test {
 
 	public static void main(String[] args) throws MonkeyLearnException {
 		String text = "Tour guide is a very good job, but in the future, if there is a tour guide mobile app, when people walk to a tourist attraction, the mobile app can introduce the corresponding tourist attraction based on GPS positioning, and the mobile app will make money through advertising, such as recommending hotels and restaurants.";
-		String result = getKeywords(text);
+		System.out.printf("\n");
+		System.out.printf(text);
 		
 	}
 	

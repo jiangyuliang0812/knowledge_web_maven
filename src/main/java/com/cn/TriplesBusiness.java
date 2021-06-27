@@ -51,7 +51,7 @@ public class TriplesBusiness {
 		// Description
 		if (data_description != null) {
 			ArrayList<String> triples = new ArrayList<String>();
-			List predicatesList = Arrays.asList("type","subject","primaryTopic","seeAlso","specialist");
+			List predicatesList = Arrays.asList("type","subject","seeAlso","specialist");
 			String database_name = "triplesbedes";
 			String column_name = "triples_description";
 			Utils.saveTriples(data_description,predicatesList,database_name,column_name);
@@ -71,7 +71,7 @@ public class TriplesBusiness {
 		// Selling
 		if (data_selling != null) {
 			ArrayList<String> triples = new ArrayList<String>();
-			List predicatesList = Arrays.asList("type","subject","primaryTopic","seeAlso","specialist");
+			List predicatesList = Arrays.asList("type","subject","seeAlso","specialist");
 			String database_name = "triplesbesell";
 			String column_name = "triples_sell";
 			Utils.saveTriples(data_selling,predicatesList,database_name,column_name);
@@ -81,7 +81,7 @@ public class TriplesBusiness {
 		// Advantage
 		if (data_advantage != null) {
 			ArrayList<String> triples = new ArrayList<String>();
-			List predicatesList = Arrays.asList("type","subject","primaryTopic","seeAlso","specialist");
+			List predicatesList = Arrays.asList("type","subject","seeAlso","specialist");
 			String database_name = "triplesbeadvan";
 			String column_name = "triples_advantage";
 			Utils.saveTriples(data_advantage,predicatesList,database_name,column_name);
@@ -91,7 +91,7 @@ public class TriplesBusiness {
 		// Focus
 		if (data_focus != null) {
 			ArrayList<String> triples = new ArrayList<String>();
-			List predicatesList = Arrays.asList("type","subject","primaryTopic","seeAlso","specialist");
+			List predicatesList = Arrays.asList("type","subject","seeAlso","specialist");
 			String database_name = "triplesbefocus";
 			String column_name = "triples_focus";
 			Utils.saveTriples(data_focus,predicatesList,database_name,column_name);
@@ -101,7 +101,7 @@ public class TriplesBusiness {
 		// Who
 		if (data_who != null) {
 			ArrayList<String> triples = new ArrayList<String>();
-			List predicatesList = Arrays.asList("type","subject","primaryTopic","seeAlso","specialist");
+			List predicatesList = Arrays.asList("type","subject","seeAlso","specialist");
 			String database_name = "triplesbewho";
 			String column_name = "triples_who";
 			Utils.saveTriples(data_who,predicatesList,database_name,column_name);

@@ -67,7 +67,7 @@ public class ResultShow extends HttpServlet {
 			float sim = Collections.max(similarities);
 			int index = similarities.indexOf(sim);
 			int id = Integer.valueOf(ids.get(index)).intValue();
-			System.out.println("Max : " + sim + "\n" + "Id: " + id);
+			System.out.println("Similarity : " + sim + "\n" + "Id: " + id);
 			
 			//根据index依次得到相应的商业模式
 			BusinessModel bm = getBusinessModel(id,sim);

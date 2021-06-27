@@ -85,7 +85,7 @@
         <p>
             Welcome user ! 
             <br> 
-            We are searching for innovative ideas.
+            We are searching for innovative ideas with commercial value.
         </p>
     
         <hr>
@@ -109,13 +109,6 @@
             
             <input type="submit" name="submit" value="Submit"/>
     
-        </form>
-    
-        <form action="/knowledge_web_maven/DataReset" method="post">
-    
-        <input type="submit" name="reset" value="Reset"/>
-        
-        </form>
         
         
         </div>

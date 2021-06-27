@@ -17,14 +17,18 @@ public class Main extends HttpServlet {
 		req.setCharacterEncoding("utf-8");
 		resp.setCharacterEncoding("utf-8");
 
-		// get idea from the Page 1
+		// get idea 
 		String idea = req.getParameter("idea");
 		
-		// insert idea and keywords into table ideas.
+		// insert idea and keywords into database ideas.
 		DataInsert.insertMySQl(idea);
+		
+		System.out.printf("\n");
+		System.out.println("Query Knowledge Graph to get Triples through keywords:");
 		
 		// get triples from the keywords of the latest idea and insert to table triplesidea
 		TriplesIdea.getAndSetTriplesIdea();
+		
 		
 		// compare one idea with all the business models and get similarity
 		Map<String, Float> similarity = Compare.getSimilarity();

@@ -81,19 +81,19 @@
 
             <h3>
                 <label> Please enter your name : </label>
-                <input id="entername" type="text" name="entername" value="Last name, First name">
+                <input id="entername" type="text" name="entername">
             </h3>
 
             <h3>The 1st recommended business model:</h3>
 			
             <p>
-                Does this business model enable your idea to better solve potential social problems?
+                Can help the idea to better solve problems?
                 <label><input type="radio" name="evaluate1" value="Yes">Yes</label> 
                 <label><input type="radio" name="evaluate1" value="No">No</label>
             </p>
 
             <p>
-                Does this business model enable your idea to find potential customer or increase sales?
+                Can help the idea to increase revenue?
                 <label><input type="radio" name="evaluate2" value="Yes">Yes</label>
                 <label><input type="radio" name="evaluate2" value="No">No</label>
             </p>
@@ -101,12 +101,12 @@
             <h3>The 2nd recommended business model:</h3>
 
             <p>
-                Does this business model enable your idea to better solve potential social problems?
+                Can help the idea to better solve problems?
                 <label><input type="radio" name="evaluate3" value="Yes">Yes</label> 
                 <label><input type="radio" name="evaluate3" value="No">No</label>
             </p>
             <p>
-                Does this business model enable your idea to find potential customer or increase sales?
+                Can help the idea to increase revenue?
                 <label><input type="radio" name="evaluate4" value="Yes">Yes</label> 
                 <label><input type="radio" name="evaluate4" value="No">No</label>
             </p>
@@ -114,12 +114,12 @@
             <h3>The 3rd recommended business model:</h3>
 
             <p>
-                Does this business model enable your idea to better solve potential social problems? 
+                Can help the idea to better solve problems?
                 <label><input type="radio" name="evaluate5" value="Yes">Yes</label> 
                 <label><input type="radio" name="evaluate5" value="No">No</label>
             </p>
             <p>
-                Does this business model enable your idea to find potential customer or increase sales?
+                Can help the idea to increase revenue?
                 <label><input type="radio" name="evaluate6" value="Yes">Yes</label> 
                 <label><input type="radio" name="evaluate6" value="No">No</label>
             </p>

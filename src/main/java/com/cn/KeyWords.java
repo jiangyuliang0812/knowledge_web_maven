@@ -70,7 +70,7 @@ public class KeyWords {
 			keyWordsList_text.add(i);
 		}
 		*/
-
+		
 		// remove same words
 		keyWordsList_text = KeyWords.removeDuplicate(keyWordsList_text);
 		
@@ -115,8 +115,8 @@ public class KeyWords {
         ArrayList result = res.arrayResult;
         // System.out.println(result);
        
-        
         // Query remaining times
+        /*
         Header[][] headers = res.headers;
         for (Header[] header : headers) {
         	for (Header h : header){
@@ -124,8 +124,7 @@ public class KeyWords {
         	}
         }
         System.out.println(headers.toString());
-      	
-        
+      	*/
         // X-Query-Limit-Limit  您当前的查询限制。
         // X-Query-Limit-Remaining 您的帐户可以使用的查询数量。
         // X-Query-Limit-Request-Queries 此请求消耗的查询数。

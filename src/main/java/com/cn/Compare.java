@@ -26,7 +26,6 @@ public class Compare {
 		
 		// 得到最新一条Idea
 		Map<String, List> result_idea = getIdea();
-		// System.out.println(result_idea);
 		
 		// 对比一条Idea和所有的BusinessModel
 		Map<String, List> result_sim = new HashMap<>();
@@ -98,7 +97,7 @@ public class Compare {
 			}		
 		}
 		
-		System.out.println(size + " predicates are found in idea."); 
+		// System.out.println(size + " predicates are found in idea."); 
 		
 		float sum = 0;
 		
@@ -117,8 +116,10 @@ public class Compare {
 			sum = 0;	 
 		}
 		
-		System.out.println("Similarity : "+ sim_final);
-    	System.out.println("Number of comparison : "+ number_of_comparison);
+		System.out.printf("\n");
+		System.out.println("Similarities of 101 Business Models: "+ sim_final);
+		System.out.printf("\n");
+    	//System.out.println("Number of comparison : "+ number_of_comparison);
 		return sim_final;
 		
 	}
@@ -139,7 +140,7 @@ public class Compare {
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-
+			
 			String host = util.getValue("host");
 			String user = util.getValue("user");
 			String password = util.getValue("password");

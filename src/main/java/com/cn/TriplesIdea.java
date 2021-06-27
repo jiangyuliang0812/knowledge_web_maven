@@ -41,6 +41,7 @@ public class TriplesIdea extends HttpServlet {
 	public static void getAndSetTriplesIdea() {
 
 		Utils util = new Utils();
+		
 		// 拿到Idea的关键字
 		ArrayList<ArrayList<String>> data_keyword_idea = getKeywordIdea();
 		// System.out.println(data_keyword_idea);
@@ -231,7 +232,7 @@ public class TriplesIdea extends HttpServlet {
 						if (!triples.contains(string_triple)) {
 							triples.add(string_triple);
 							insert_idea(string_triple, p, id_idea);
-							// System.out.println(string_triple);
+							System.out.println(string_triple);
 						}
 					}
 					triple = new ArrayList<String>();
@@ -241,7 +242,7 @@ public class TriplesIdea extends HttpServlet {
 			// 新建一个结果集 储存查询返回的结果
 			ResultSet results2 = qexec2.execSelect();
 			
-	        List predicatesList2 = Arrays.asList("type","subject","primaryTopic","seeAlso","specialist","industry","product","manufacturer","owners","founder","foundedBy","brands","service","areaServed","owner");
+	        List predicatesList2 = Arrays.asList("type","subject","seeAlso","specialist","industry","product","manufacturer","owners","founder","foundedBy","brands","service","areaServed","owner");
 	           
 	        Map<String, Integer> counter2 = new HashMap<>();
 	        // 变成arrayList才能做删除操作
@@ -289,7 +290,7 @@ public class TriplesIdea extends HttpServlet {
 						if (!triples.contains(string_triple)) {
 							triples.add(string_triple);
 							insert_idea(string_triple, p, id_idea);
-							// System.out.println(string_triple);
+							System.out.println(string_triple);
 						}
 					}
 					triple = new ArrayList<String>();
